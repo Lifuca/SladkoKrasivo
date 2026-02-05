@@ -149,7 +149,7 @@ $menu_img = $uploads . '2026/01/menu-flower.webp';
   </div>
 </div>
 
-<!-- ===== FULLSCREEN MENU ===== -->
+<!-- ===== FULLSCREEN MENU123 ===== -->
 <div id="lr-menu" class="lr-menu" aria-hidden="true">
   <div class="lr-menu__backdrop" data-lr-menu-close></div>
 
