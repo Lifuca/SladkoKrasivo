@@ -1,0 +1,175 @@
+:root {
+  /* Base */
+  --accent: #0D2A45;
+  --site-bg: #E1EDEB;
+
+  /* New heading color (dark green, not blue) */
+  --heading-color: #2F4F4A;
+
+  --text-main: #2F4F4A;
+  --text-muted: #5E6F73;
+  --card-bg: #ffffff;
+
+  /* Radius */
+  --radius-xl: 24px;
+  --radius-md: 18px;
+
+  /* Button fill */
+  --btn-fill: linear-gradient(
+    90deg,
+    #E1EDEB 0%,
+    #C7D6D2 100%
+  );
+
+  /* Animation (slow, premium) */
+  --btn-speed: 0.8s;
+  --btn-ease: cubic-bezier(.4,0,.2,1);
+}
+
+/* ===== WRAPPER ===== */
+.ui-dual {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 24px;
+}
+
+/* ===== GRID ===== */
+.ui-dual__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: stretch;
+}
+
+/* ===== COLUMN ===== */
+.ui-col {
+  background: var(--card-bg);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+
+  /* ⬇ меньше воздуха между элементами */
+  gap: 18px;
+
+  border: 1px solid rgba(13,42,69,0.08);
+}
+
+/* ===== HEADINGS ===== */
+.ui-title {
+  font-size: 32px;        /* было 28 */
+  font-weight: 700;      /* было 600 */
+  line-height: 1.2;
+  color: var(--heading-color);
+  margin-bottom: 2px;    /* описание почти сразу под заголовком */
+}
+
+/* ===== TEXT ===== */
+.ui-text {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-muted);
+
+  /* ⬇ уменьшаем разрыв перед кнопками */
+  margin-bottom: 6px;
+}
+
+/* ===== BUTTONS ===== */
+.ui-actions {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+
+  /* ⬇ кнопки ближе к описанию */
+  margin-top: 4px;
+}
+
+.ui-btn {
+  position: relative;
+  overflow: hidden;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--btn-speed) var(--btn-ease);
+}
+
+.ui-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--btn-fill);
+  transform: translateX(-100%);
+  transition: transform var(--btn-speed) var(--btn-ease);
+  z-index: 0;
+}
+
+.ui-btn:hover::before {
+  transform: translateX(0);
+}
+
+.ui-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== LEFT GALLERY ===== */
+.ui-gallery {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.ui-gallery img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* ===== RIGHT IMAGE ===== */
+.ui-image {
+  margin-top: auto;
+}
+
+.ui-image img {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .ui-dual__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ui-image img {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ui-dual {
+    padding: 48px 16px;
+  }
+
+  .ui-col {
+    padding: 28px;
+    gap: 16px;
+  }
+
+  .ui-title {
+    font-size: 26px;
+  }
+
+  .ui-gallery img {
+    height: 140px;
+  }
+}

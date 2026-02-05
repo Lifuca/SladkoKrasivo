@@ -1,0 +1,209 @@
+:root {
+  --footer-border: #E1EDEB;
+  --heading-color: #2F4F4A;
+  --text-muted: #6F7F7B;
+  --link-hover: #0D2A45;
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  border-top: 1px solid var(--footer-border);
+  padding: 72px 24px;
+}
+
+/* ===== GRID ===== */
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 1.5fr 2fr; /* ⬅️ первый столбец шире */
+  gap: 64px;
+}
+
+/* ===== WIDGET COLUMN ===== */
+.footer-widget-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== YANDEX WIDGET ===== */
+.footer-rating-widget {
+  max-width: 360px;
+}
+
+.footer-rating-widget iframe {
+  width: 100%;
+  height: 120px;
+  border: none;
+  border-radius: 12px;
+}
+
+.footer-rating-widget a {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-rating-widget a:hover {
+  color: var(--link-hover);
+}
+
+/* ===== SOCIALS ===== */
+.footer-socials {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-socials a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--footer-border);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+  color: var(--heading-color);
+  text-decoration: none;
+}
+
+.footer-socials a:hover {
+  background: #E1EDEB;
+}
+
+/* ===== NAV ===== */
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.footer-col h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 16px;
+}
+
+.footer-col a {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-col a:hover {
+  color: var(--link-hover);
+}
+
+/* ===== LEGAL BAR ===== */
+.footer-legal-bar {
+  border-top: 1px solid var(--footer-border);
+  padding: 16px 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.footer-legal-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-legal-inner a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-legal-inner a:hover {
+  color: var(--link-hover);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .footer-nav {
+    display: none;
+  }
+}
+
+/* ===== LEGAL BAR ===== */
+.footer-legal-bar {
+  border-top: 1px solid var(--footer-border);
+  padding: 16px 24px;
+
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* контейнер на всю ширину */
+.footer-legal-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* ⬅️ ключевой момент */
+
+  gap: 24px;
+}
+
+/* элементы */
+.footer-legal-inner span,
+.footer-legal-inner a {
+  white-space: nowrap; /* чтобы не ломались */
+}
+
+/* ссылки */
+.footer-legal-inner a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.footer-legal-inner a:hover {
+  color: var(--link-hover);
+}
+
+/* ===== ADAPTIVE ===== */
+
+/* экран сужается — элементы сближаются */
+@media (max-width: 900px) {
+  .footer-legal-inner {
+    gap: 16px;
+  }
+}
+
+/* очень узкий экран — всё ещё в одну строку, но компактно */
+@media (max-width: 600px) {
+  .footer-legal-inner {
+    gap: 12px;
+    font-size: 12px;
+  }
+}
+
+/* крайний случай: совсем маленькие экраны */
+@media (max-width: 420px) {
+  .footer-legal-inner {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .footer-legal-inner span,
+  .footer-legal-inner a {
+    width: 100%;
+  }
+}

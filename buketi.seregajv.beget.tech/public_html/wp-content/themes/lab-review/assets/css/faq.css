@@ -1,0 +1,89 @@
+/* =====================================================
+   FAQ / QUESTIONS — ADAPTED TO SITE STYLE
+   ===================================================== */
+
+.faq {
+  padding: 90px 0;
+}
+
+/* ===== MAIN TITLE ===== */
+.faq .section--title {
+  font-family: inherit;
+  font-size: 34px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 44px;
+
+  /* тёмно-зелёный, в стиле сайта */
+  color: #2F4F4A;
+}
+
+/* ===== WRAPPER ===== */
+.questions {
+  width: 100%;
+  max-width: none;
+}
+
+/* ===== ITEM ===== */
+.questions__item {
+  border-bottom: 1px solid #E1EDEB;
+}
+
+/* ===== HEADER (QUESTION) ===== */
+.questions__item-head {
+  width: 100%;
+  background: none;
+  border: none;
+
+  padding: 26px 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+  text-align: left;
+
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 500;
+
+  /* основной текст — мягкий тёмно-зелёный */
+  color: #2F4F4A;
+
+  outline: none;
+}
+
+/* ❌ УБИРАЕМ HOVER ЭФФЕКТ */
+.questions__item-head:hover,
+.questions__item-head:focus {
+  background: none;
+}
+
+/* ===== TITLE TEXT ===== */
+.questions__item-title {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ❌ УБИРАЕМ ПЛЮС / МИНУС */
+.questions__item-drop {
+  display: none;
+}
+
+/* ===== BODY ===== */
+.questions__item-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s ease; /* чуть медленнее, мягче */
+}
+
+/* ===== ANSWER TEXT ===== */
+.questions__item-text {
+  padding: 0 0 30px 0;
+  font-size: 16px;
+  line-height: 1.65;
+
+  /* более светлый, спокойный текст */
+  color: #5E6F73;
+}

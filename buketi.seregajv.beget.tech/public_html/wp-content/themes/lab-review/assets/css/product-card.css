@@ -1,0 +1,91 @@
+/* ===== CARD ===== */
+.custom-product-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .25s ease;
+}
+
+.custom-product-card:hover {
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+/* ===== IMAGE ===== */
+.product-image img {
+  width: 100%;
+  border-radius: 16px;
+  display: block;
+}
+
+/* ===== BODY ===== */
+.product-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+}
+
+/* ===== TITLE ===== */
+.product-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #2F4F4A;
+  margin: 0;
+}
+
+/* ===== PRICE ===== */
+.product-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+}
+
+.product-price del {
+  font-size: 14px;
+  color: #9CA6A3;
+  margin-right: 6px;
+}
+
+/* ===== BUTTON (BIGGER) ===== */
+.product-actions a.button {
+  width: 100%;
+  border-radius: 16px;          /* чуть крупнее скругление */
+  background: #4A4A4A;
+  color: #fff;
+  text-align: center;
+
+  font-size: 15px;              /* было 13px */
+  font-weight: 600;
+  padding: 16px 0;              /* было 12px 0 */
+  min-height: 52px;             /* делает кнопку визуально “больше” стабильно */
+
+  border: 2px solid transparent;
+  box-sizing: border-box;
+
+  transition: background .25s ease, color .25s ease, border-color .25s ease;
+}
+
+.product-actions a.button:hover,
+.product-actions a.button:focus {
+  background: #fff;
+  color: #4A4A4A;
+  border-color: #4A4A4A;
+}
+
+
+/* hover: белая кнопка + серая граница + серый текст */
+.product-actions a.button:hover,
+.product-actions a.button:focus {
+  background: #fff;
+  color: #4A4A4A;
+  border-color: #4A4A4A;
+}
+
+/* если тема добавляет active-эффекты */
+.product-actions a.button:active {
+  background: #fff;
+  color: #4A4A4A;
+  border-color: #4A4A4A;
+}
