@@ -240,3 +240,28 @@ body.lr-menu-open{ overflow:hidden; }
 
   body.lr-sticky .lr-cats--inmid{ justify-content:flex-start; }
 }
+
+/* Слот по умолчанию пустой и не мешает */
+.lr-midnav-slot { display: none; }
+
+/* Sticky: показываем слот, и прячем 3-ю строку */
+body.lr-sticky .lr-midnav-slot { 
+  display: block; 
+  min-width: 0;
+}
+
+body.lr-sticky .lr-header__cats { display: none; }
+
+/* Убираем дубли линий: в sticky оставляем одну */
+body.lr-sticky .lr-header__mid { border-bottom: 1px solid rgba(0,0,0,.08); }
+
+/* Когда nav переехал в mid */
+.lr-cats--moved{
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0;
+  margin: 0;
+}

@@ -93,16 +93,10 @@ $menu_img     = file_exists($menu_img_fs) ? $menu_img_url : '';
           <?php echo esc_html(get_bloginfo('name')); ?>
         </a>
 
-        <nav class="lr-cats lr-cats--inmid" aria-label="Категории каталога (липкая шапка)">
-          <?php if (!empty($cats) && !is_wp_error($cats)): ?>
-            <?php foreach ($cats as $cat): ?>
-              <a class="lr-cats__link" href="<?php echo esc_url(get_term_link($cat)); ?>">
-                <?php echo esc_html($cat->name); ?>
-              </a>
-            <?php endforeach; ?>
-          <?php endif; ?>
-        </nav>
+       
+        <div class="lr-midnav-slot" aria-label="Навигация (sticky)"></div>
       </div>
+
 
       <!-- RIGHT: в sticky оставляем ЛУПУ + АККАУНТ + КОРЗИНУ -->
       <div class="lr-hright">
