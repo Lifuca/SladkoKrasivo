@@ -17,8 +17,8 @@ a { color: inherit; }
 }
 
 .lr-header {
-  border-bottom: 1px solid rgba(0,0,0,.08);
-  padding: 14px 0;
+  border-bottom: 0;
+  padding: 0;
 }
 
 .lr-header__row {

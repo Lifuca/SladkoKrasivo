@@ -1,6 +1,6 @@
 <?php
 /**
- * Header (Lab-Review) — 3 уровня + полноэкранное меню как у донора
+ * Header (Lab-Review) — 3 уровня + sticky one-line + fullscreen menu
  */
 if (!defined('ABSPATH')) exit;
 
@@ -14,7 +14,6 @@ $account_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink(
 $cart_url    = function_exists('wc_get_cart_url') ? wc_get_cart_url() : home_url('/');
 $cart_count  = (function_exists('WC') && WC()->cart) ? WC()->cart->get_cart_contents_count() : 0;
 
-// Категории WooCommerce (уровень 3)
 $cats = [];
 if (taxonomy_exists('product_cat')) {
   $cats = get_terms([
@@ -29,8 +28,11 @@ if (taxonomy_exists('product_cat')) {
 $u = wp_get_upload_dir();
 $uploads = trailingslashit($u['baseurl']);
 
-// Картинка для бургер-меню (можешь заменить путь на любой существующий файл)
-$menu_img = $uploads . '2026/01/menu-flower.webp';
+// картинка для меню (поставь реальный файл, если нужно)
+$menu_img_rel = '2026/01/menu-flower.webp';
+$menu_img_url = $uploads . $menu_img_rel;
+$menu_img_fs  = trailingslashit($u['basedir']) . $menu_img_rel;
+$menu_img     = file_exists($menu_img_fs) ? $menu_img_url : '';
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -41,7 +43,7 @@ $menu_img = $uploads . '2026/01/menu-flower.webp';
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<header class="lr-header">
+<header class="lr-header" id="lr-header">
 
   <!-- ===== LEVEL 1: TICKER ===== -->
   <div class="lr-header__ticker" role="region" aria-label="Уведомления">
@@ -66,6 +68,7 @@ $menu_img = $uploads . '2026/01/menu-flower.webp';
           <span></span><span></span><span></span>
         </button>
 
+        <!-- эти блоки скрываются в sticky, но в обычном режиме остаются -->
         <div class="lr-phone">
           <a class="lr-phone__number" href="tel:<?php echo esc_attr($phone_tel); ?>">
             <?php echo esc_html($phone_raw); ?>
@@ -84,20 +87,30 @@ $menu_img = $uploads . '2026/01/menu-flower.webp';
         </div>
       </div>
 
-      <!-- CENTER -->
+      <!-- CENTER: в обычном режиме логотип, в sticky — меню категорий -->
       <div class="lr-hcenter">
         <a class="lr-logo" href="<?php echo esc_url(home_url('/')); ?>">
           <?php echo esc_html(get_bloginfo('name')); ?>
         </a>
+
+        <nav class="lr-cats lr-cats--inmid" aria-label="Категории каталога (липкая шапка)">
+          <?php if (!empty($cats) && !is_wp_error($cats)): ?>
+            <?php foreach ($cats as $cat): ?>
+              <a class="lr-cats__link" href="<?php echo esc_url(get_term_link($cat)); ?>">
+                <?php echo esc_html($cat->name); ?>
+              </a>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </nav>
       </div>
 
-      <!-- RIGHT -->
+      <!-- RIGHT: в sticky оставляем ЛУПУ + АККАУНТ + КОРЗИНУ -->
       <div class="lr-hright">
         <button class="lr-iconbtn" type="button" aria-label="Поиск" aria-controls="lr-search" aria-expanded="false" data-lr-search-open>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 1 1 5.29 13.99l4.36 4.36-1.41 1.41-4.36-4.36A8 8 0 0 1 10 2Zm0 2a6 6 0 1 0 .01 12.01A6 6 0 0 0 10 4Z"/></svg>
         </button>
 
-        <a class="lr-iconbtn" href="<?php echo esc_url($account_url); ?>" aria-label="Личный кабинет">
+        <a class="lr-iconbtn lr-accountbtn" href="<?php echo esc_url($account_url); ?>" aria-label="Личный кабинет">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></svg>
         </a>
 
@@ -110,10 +123,10 @@ $menu_img = $uploads . '2026/01/menu-flower.webp';
     </div>
   </div>
 
-  <!-- ===== LEVEL 3: CATEGORIES ===== -->
+  <!-- ===== LEVEL 3: CATEGORIES (обычный режим) ===== -->
   <div class="lr-header__cats">
     <div class="lr-container">
-      <nav class="lr-cats" aria-label="Категории каталога">
+      <nav class="lr-cats lr-cats--row" aria-label="Категории каталога">
         <?php if (!empty($cats) && !is_wp_error($cats)): ?>
           <?php foreach ($cats as $cat): ?>
             <a class="lr-cats__link" href="<?php echo esc_url(get_term_link($cat)); ?>">
@@ -149,7 +162,7 @@ $menu_img = $uploads . '2026/01/menu-flower.webp';
   </div>
 </div>
 
-<!-- ===== FULLSCREEN MENU123 ===== -->
+<!-- ===== FULLSCREEN MENU (не перекрывает шапку) ===== -->
 <div id="lr-menu" class="lr-menu" aria-hidden="true">
   <div class="lr-menu__backdrop" data-lr-menu-close></div>
 
@@ -168,11 +181,11 @@ $menu_img = $uploads . '2026/01/menu-flower.webp';
       </nav>
 
       <div class="lr-menu__side" aria-label="Блок справа">
-        <?php if (!empty($menu_img)): ?>
-          <div class="lr-menu__image">
+        <div class="lr-menu__image">
+          <?php if (!empty($menu_img)): ?>
             <img src="<?php echo esc_url($menu_img); ?>" alt="" loading="lazy">
-          </div>
-        <?php endif; ?>
+          <?php endif; ?>
+        </div>
       </div>
 
     </div>
