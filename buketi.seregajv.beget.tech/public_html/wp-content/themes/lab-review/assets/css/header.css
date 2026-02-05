@@ -265,3 +265,44 @@ body.lr-sticky .lr-header__mid { border-bottom: 1px solid rgba(0,0,0,.08); }
   padding: 0;
   margin: 0;
 }
+
+
+/* =========================
+   HEADER RESPONSIVE RULES
+   (по твоему ТЗ)
+   ========================= */
+
+/* <= 750px: убираем телефон + режим работы */
+@media (max-width: 750px) {
+  .lr-phone { display: none !important; }
+}
+
+/* <= 670px: убираем 3-ю строку (навигацию) в обычном режиме */
+@media (max-width: 670px) {
+  .lr-header__cats { display: none !important; }
+
+  /* если вдруг sticky переносит навигацию в mid — тоже убираем, чтобы не было */
+  .lr-midnav-slot { display: none !important; }
+}
+
+/* <= 450px: убираем WhatsApp/Telegram */
+@media (max-width: 450px) {
+  .lr-mswrap { display: none !important; }
+}
+
+/* <= 350px: убираем только название сайта (логотип).
+   Поиск + аккаунт + корзина остаются */
+@media (max-width: 350px) {
+  .lr-logo { display: none !important; }
+
+  /* чтобы центр не занимал место, когда логотип скрыт */
+  .lr-hcenter { display: none !important; }
+
+  /* перестраиваем mid: left / right */
+  .lr-header__mid-inner {
+    grid-template-columns: auto 1fr;
+  }
+  .lr-hright {
+    justify-content: flex-end;
+  }
+}
