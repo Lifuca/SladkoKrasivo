@@ -1,0 +1,147 @@
+/* =====================================================
+   Lab-Review — TOKENS (colors + fonts)
+   Подключай ПЕРВЫМ.
+   ===================================================== */
+
+/* =========================
+   Custom Fonts
+   Заголовки: NEXT ART Bold (700)
+   Текст:     CeraPro Regular (400)
+   ========================= */
+
+/* --- CeraPro (Text) --- */
+@font-face{
+  font-family: "LR Cera";
+  src:
+    url("../fonts/CeraPro-Light.woff2") format("woff2"),
+    url("../fonts/CeraPro-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: "LR Cera";
+  src:
+    url("../fonts/CeraPro-Regular.woff2") format("woff2"),
+    url("../fonts/CeraPro-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- NEXT ART (Headings) --- */
+@font-face{
+  font-family: "LR NextArt";
+  src: url("../fonts/NEXT-ART_Light_1.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: "LR NextArt";
+  src: url("../fonts/NEXT-ART_Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: "LR NextArt";
+  src: url("../fonts/NEXT-ART_SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: "LR NextArt";
+  src: url("../fonts/NEXT-ART_Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: "LR NextArt";
+  src: url("../fonts/NEXT-ART_Heavy_1.woff") format("woff");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================
+   Tokens
+   ========================= */
+:root{
+  color-scheme: light;
+
+  /* Fonts */
+  --lr-font-head: "LR NextArt", Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --lr-font-text: "LR Cera", Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* Main color */
+  --lr-primary: #818181;
+
+  /* Background / text */
+  --lr-bg: #ffffff;
+  --lr-text: #101010;
+  --lr-muted: rgba(0,0,0,.68);
+
+  /* Lines / borders */
+  --lr-line: rgba(0,0,0,.10);
+
+  /* Headings colors */
+  --lr-heading-color: var(--lr-primary); /* большие заголовки */
+  --lr-heading-color-small: var(--lr-text);
+
+  /* UI */
+  --lr-radius: 18px;
+  --lr-radius-sm: 12px;
+  --lr-shadow: 0 12px 30px rgba(0,0,0,.08);
+
+  /* Layout */
+  --lr-container: 1140px;
+  --lr-gutter: 16px;
+}
+
+/* =========================
+   Base apply (fonts + colors)
+   ========================= */
+html, body{
+  background: var(--lr-bg);
+  color: var(--lr-text);
+}
+
+body{
+  margin: 0;
+  font-family: var(--lr-font-text);
+  line-height: 1.5;
+}
+
+/* Обычный текст */
+body,
+button, input, textarea, select,
+p, li, a, span, div{
+  font-family: var(--lr-font-text);
+  font-weight: 400;
+}
+
+/* Заголовки */
+h1,h2,h3,h4,h5,h6,
+.section--title, .ui-title{
+  font-family: var(--lr-font-head);
+  font-weight: 700;
+  color: var(--lr-heading-color-small);
+  letter-spacing: .2px;
+  margin: 0 0 .6em;
+}
+
+/* Большие заголовки — серые (#818181) */
+h1, h2{
+  color: var(--lr-heading-color);
+}
+
+/* Ссылки */
+a{ color: inherit; }

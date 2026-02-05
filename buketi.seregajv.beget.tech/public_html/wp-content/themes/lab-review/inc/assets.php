@@ -6,6 +6,16 @@ add_action('wp_enqueue_scripts', function () {
   $uri = get_stylesheet_directory_uri();
   $dir = get_stylesheet_directory();
 
+  // TOKENS (fonts + colors) — грузим ПЕРВЫМ
+  wp_enqueue_style(
+    'lab-review-tokens',
+    get_stylesheet_directory_uri() . '/assets/css/tokens.css',
+    [],
+    wp_get_theme()->get('Version')
+  );
+
+
+
   // Base
   if (file_exists($dir . '/assets/css/main.css')) {
     wp_enqueue_style('lr-main', $uri . '/assets/css/main.css', [], $v);
