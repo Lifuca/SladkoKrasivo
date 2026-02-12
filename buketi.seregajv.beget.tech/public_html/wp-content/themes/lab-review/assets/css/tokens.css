@@ -93,8 +93,8 @@
   --lr-line: rgba(0,0,0,.10);
 
   /* Headings colors */
-  --lr-heading-color: var(--lr-primary); /* большие заголовки */
-  --lr-heading-color-small: var(--lr-text);
+  --lr-heading-color: var(--lr-primary);   /* h1/h2 */
+  --lr-heading-color-small: var(--lr-text);/* h3+ */
 
   /* UI */
   --lr-radius: 18px;
@@ -122,8 +122,7 @@ body{
 
 /* Обычный текст */
 body,
-button, input, textarea, select,
-p, li, a, span, div{
+button, input, textarea, select{
   font-family: var(--lr-font-text);
   font-weight: 400;
 }
@@ -138,7 +137,7 @@ h1,h2,h3,h4,h5,h6,
   margin: 0 0 .6em;
 }
 
-/* Большие заголовки — серые (#818181) */
+/* Большие заголовки — серые */
 h1, h2{
   color: var(--lr-heading-color);
 }

@@ -6,22 +6,17 @@ add_action('wp_enqueue_scripts', function () {
   $uri = get_stylesheet_directory_uri();
   $dir = get_stylesheet_directory();
 
-  // TOKENS (fonts + colors) — грузим ПЕРВЫМ
-  wp_enqueue_style(
-    'lab-review-tokens',
-    get_stylesheet_directory_uri() . '/assets/css/tokens.css',
-    [],
-    wp_get_theme()->get('Version')
-  );
-
-
-
-  // Base
-  if (file_exists($dir . '/assets/css/main.css')) {
-    wp_enqueue_style('lr-main', $uri . '/assets/css/main.css', [], $v);
+  // TOKENS (fonts + colors) — ПЕРВЫМ
+  if (file_exists($dir . '/assets/css/tokens.css')) {
+    wp_enqueue_style('lr-tokens', $uri . '/assets/css/tokens.css', [], $v);
   }
 
-  // Header
+  // MAIN — зависит от tokens
+  if (file_exists($dir . '/assets/css/main.css')) {
+    wp_enqueue_style('lr-main', $uri . '/assets/css/main.css', ['lr-tokens'], $v);
+  }
+
+  // HEADER — зависит от main (а значит и от tokens)
   if (file_exists($dir . '/assets/css/header.css')) {
     wp_enqueue_style('lr-header', $uri . '/assets/css/header.css', ['lr-main'], $v);
   }
@@ -29,15 +24,14 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('lr-header', $uri . '/assets/js/header.js', [], $v, true);
   }
 
-  // Footer
+  // FOOTER — зависит от main
   if (file_exists($dir . '/assets/css/site-footer.css')) {
     wp_enqueue_style('lr-site-footer', $uri . '/assets/css/site-footer.css', ['lr-main'], $v);
   }
 
-  // Front Page blocks (только на главной)
   if (is_front_page()) {
 
-    // HERO
+    // HERO — зависит от main
     if (file_exists($dir . '/assets/css/hero.css')) {
       wp_enqueue_style('lr-hero', $uri . '/assets/css/hero.css', ['lr-main'], $v);
     }

@@ -9,6 +9,7 @@
   --wp--style--root--padding-bottom: 0px !important;
   --wp--style--root--padding-left: 0px !important;
 }
+
 html, body{ margin:0 !important; padding:0 !important; }
 body{ padding-top:0 !important; }
 .wp-site-blocks{ padding-top:0 !important; margin-top:0 !important; }
@@ -18,6 +19,33 @@ body{ padding-top:0 !important; }
 
 .lr-header{ position: relative; z-index: 1000; }
 .lr-header a{ text-decoration:none; color:inherit; }
+
+/* =========================
+   ICONS COLOR (clean, no thickening)
+   ========================= */
+.lr-iconbtn,
+.lr-ms{
+  color: var(--lr-primary); /* #818181 */
+}
+
+.lr-iconbtn svg,
+.lr-ms svg{
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Перебиваем зашитые fill="#000" в SVG */
+.lr-iconbtn svg [fill]:not([fill="none"]),
+.lr-ms svg [fill]:not([fill="none"]){
+  fill: currentColor !important;
+}
+
+/* Если иконка stroke-тип — красим stroke, но не добавляем его всем */
+.lr-iconbtn svg [stroke],
+.lr-ms svg [stroke]{
+  stroke: currentColor !important;
+}
 
 /* ===== Ticker ===== */
 .lr-header__ticker{ background:#111; color:#fff; overflow:hidden; }
@@ -74,7 +102,12 @@ body{ padding-top:0 !important; }
 
 /* CENTER: logo + sticky categories (one-line) */
 .lr-hcenter{ display:flex; justify-content:center; align-items:center; min-width:0; gap:18px; }
-.lr-logo{ font-weight:900; letter-spacing:.2px; font-size:22px; }
+.lr-logo{
+  font-weight:900;
+  letter-spacing:.2px;
+  font-size:22px;
+  color: var(--lr-primary); /* СЕРЫЙ логотип */
+}
 
 /* Категории в mid (только sticky) */
 .lr-cats--inmid{ display:none; }
@@ -142,7 +175,7 @@ body{ padding-top:0 !important; }
   top: var(--lr-menu-top, 120px);
   height: calc(100vh - var(--lr-menu-top, 120px));
   display:none;
-  z-index: 900; /* ВАЖНО: ниже шапки (1000), чтобы бургер был кликабелен */
+  z-index: 900;
 }
 .lr-menu.is-open{ display:block; }
 
@@ -201,35 +234,22 @@ body{ padding-top:0 !important; }
 /* тикер скрываем в sticky */
 body.lr-sticky .lr-header__ticker{ display:none; }
 
-/* В sticky скрываем 3-й ряд целиком (чтобы было одним рядом) */
+/* В sticky скрываем 3-й ряд целиком */
 body.lr-sticky .lr-header__cats{ display:none; }
 
-/* Убираем “двойные линии”: оставляем одну у mid */
-body.lr-sticky .lr-header__mid{ border-bottom: 1px solid rgba(0,0,0,.08); }
-
-/* Mid превращаем в единую строку: left / center / right */
+/* Mid превращаем в единую строку */
 body.lr-sticky .lr-header__mid-inner{
   grid-template-columns: auto 1fr auto;
   padding:10px 0;
   gap:14px;
 }
 
-/* В sticky в центре показываем меню категорий, логотип прячем */
+/* В sticky логотип прячем */
 body.lr-sticky .lr-logo{ display:none; }
-body.lr-sticky .lr-cats--inmid{
-  display:flex;
-  justify-content:center;
-  gap:28px;
-  white-space:nowrap;
-  overflow-x:auto;
-  padding:0;
-}
 
-/* В sticky скрываем телефон и мессенджеры (как ты просил) */
 body.lr-sticky .lr-phone,
 body.lr-sticky .lr-mswrap{ display:none !important; }
 
-/* В sticky справа оставляем лупу + аккаунт + корзину (ничего не скрываем) */
 body.lr-menu-open{ overflow:hidden; }
 
 /* mobile */
@@ -237,39 +257,10 @@ body.lr-menu-open{ overflow:hidden; }
   .lr-menu__inner{ grid-template-columns: 1fr; }
   .lr-menu__side{ display:none; }
   .lr-menu__list{ font-size:28px; }
-
-  body.lr-sticky .lr-cats--inmid{ justify-content:flex-start; }
 }
-
-/* Слот по умолчанию пустой и не мешает */
-.lr-midnav-slot { display: none; }
-
-/* Sticky: показываем слот, и прячем 3-ю строку */
-body.lr-sticky .lr-midnav-slot { 
-  display: block; 
-  min-width: 0;
-}
-
-body.lr-sticky .lr-header__cats { display: none; }
-
-/* Убираем дубли линий: в sticky оставляем одну */
-body.lr-sticky .lr-header__mid { border-bottom: 1px solid rgba(0,0,0,.08); }
-
-/* Когда nav переехал в mid */
-.lr-cats--moved{
-  display: flex;
-  justify-content: center;
-  gap: 28px;
-  overflow-x: auto;
-  white-space: nowrap;
-  padding: 0;
-  margin: 0;
-}
-
 
 /* =========================
    HEADER RESPONSIVE RULES
-   (по твоему ТЗ)
    ========================= */
 
 /* <= 750px: убираем телефон + режим работы */
@@ -277,12 +268,9 @@ body.lr-sticky .lr-header__mid { border-bottom: 1px solid rgba(0,0,0,.08); }
   .lr-phone { display: none !important; }
 }
 
-/* <= 670px: убираем 3-ю строку (навигацию) в обычном режиме */
+/* <= 670px: убираем 3-ю строку (навигацию) */
 @media (max-width: 670px) {
   .lr-header__cats { display: none !important; }
-
-  /* если вдруг sticky переносит навигацию в mid — тоже убираем, чтобы не было */
-  .lr-midnav-slot { display: none !important; }
 }
 
 /* <= 450px: убираем WhatsApp/Telegram */
@@ -290,15 +278,11 @@ body.lr-sticky .lr-header__mid { border-bottom: 1px solid rgba(0,0,0,.08); }
   .lr-mswrap { display: none !important; }
 }
 
-/* <= 350px: убираем только название сайта (логотип).
-   Поиск + аккаунт + корзина остаются */
+/* <= 350px: убираем только название сайта */
 @media (max-width: 350px) {
   .lr-logo { display: none !important; }
-
-  /* чтобы центр не занимал место, когда логотип скрыт */
   .lr-hcenter { display: none !important; }
 
-  /* перестраиваем mid: left / right */
   .lr-header__mid-inner {
     grid-template-columns: auto 1fr;
   }
@@ -306,3 +290,116 @@ body.lr-sticky .lr-header__mid { border-bottom: 1px solid rgba(0,0,0,.08); }
     justify-content: flex-end;
   }
 }
+
+/* =========================================================
+   ICONS — clean color control (no stroke thickening)
+   ========================================================= */
+
+/* базовый цвет контейнеров */
+.lr-iconbtn,
+.lr-ms{
+  color: var(--lr-primary) !important;
+}
+
+/* размер SVG */
+.lr-iconbtn svg,
+.lr-ms svg{
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* --- по умолчанию: не трогаем stroke-width вообще --- */
+/* Перебиваем только цвет (fill/stroke), но не толщину */
+.lr-iconbtn svg [fill]:not([fill="none"]),
+.lr-ms svg [fill]:not([fill="none"]){
+  fill: currentColor !important;
+}
+
+.lr-iconbtn svg [stroke]:not([stroke="none"]),
+.lr-ms svg [stroke]:not([stroke="none"]){
+  stroke: currentColor !important;
+}
+
+/* если в SVG зашиты inline style="fill:#000" / "stroke:#000" */
+.lr-iconbtn svg [style*="fill"],
+.lr-ms svg [style*="fill"]{
+  fill: currentColor !important;
+}
+.lr-iconbtn svg [style*="stroke"],
+.lr-ms svg [style*="stroke"]{
+  stroke: currentColor !important;
+}
+
+/* =========================================================
+   Messengers buttons — hover like reference (bg grey, icon white)
+   ========================================================= */
+
+.lr-ms{
+  width:36px;
+  height:36px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#fff;
+  border:1px solid rgba(0,0,0,.12);
+
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease, color .18s ease;
+}
+
+.lr-ms:hover,
+.lr-ms:focus-visible{
+  background: var(--lr-primary);
+  border-color: var(--lr-primary);
+  color:#fff !important;           /* SVG станет белой */
+  transform: translateY(-1px);
+}
+
+.lr-ms:active{ transform: translateY(0); }
+
+.lr-ms:focus-visible{
+  outline: 2px solid rgba(129,129,129,.35);
+  outline-offset: 2px;
+}
+/* =========================================================
+   Icon buttons (search/profile/cart) — hover like messengers
+   ========================================================= */
+
+/* базовый вид уже есть, добавляем только hover-эффект */
+.lr-iconbtn{
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease, color .18s ease;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.12);
+  color: var(--lr-primary) !important;
+}
+
+.lr-iconbtn:hover,
+.lr-iconbtn:focus-visible{
+  background: var(--lr-primary);
+  border-color: var(--lr-primary);
+  color:#fff !important;          /* SVG станет белой */
+  transform: translateY(-1px);
+}
+
+.lr-iconbtn:active{ transform: translateY(0); }
+
+.lr-iconbtn:focus-visible{
+  outline: 2px solid rgba(129,129,129,.35);
+  outline-offset: 2px;
+}
+
+/* гарантируем, что SVG берёт currentColor (и НЕ трогаем stroke-width) */
+.lr-iconbtn svg{
+  width: 18px;
+  height: 18px;
+  display:block;
+}
+
+/* fill/stroke только по цвету */
+.lr-iconbtn svg [fill]:not([fill="none"]){ fill: currentColor !important; }
+.lr-iconbtn svg [stroke]:not([stroke="none"]){ stroke: currentColor !important; }
+
+.lr-iconbtn svg [style*="fill"]{ fill: currentColor !important; }
+.lr-iconbtn svg [style*="stroke"]{ stroke: currentColor !important; }
