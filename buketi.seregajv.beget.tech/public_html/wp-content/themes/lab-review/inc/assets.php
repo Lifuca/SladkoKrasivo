@@ -61,6 +61,11 @@ add_action('wp_enqueue_scripts', function () {
     if (file_exists($dir . '/assets/js/faq.js')) {
       wp_enqueue_script('lr-faq', $uri . '/assets/js/faq.js', [], $v, true);
     }
+
+    if (file_exists($dir . '/assets/css/products-by-categories.css')) {
+      wp_enqueue_style('lr-products-by-categories', $uri . '/assets/css/products-by-categories.css', ['lr-main'], $v);
+    }
+
   }
 
 }, 20);

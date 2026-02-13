@@ -403,3 +403,16 @@ body.lr-menu-open{ overflow:hidden; }
 
 .lr-iconbtn svg [style*="fill"]{ fill: currentColor !important; }
 .lr-iconbtn svg [style*="stroke"]{ stroke: currentColor !important; }
+
+/* FIX: logo color */
+.lr-logo,
+.lr-logo a{
+  color: var(--lr-primary) !important;
+}
+
+/* FIX: phone weight + color */
+.lr-phone__number{
+  font-weight: 400 !important;   /* было жирно */
+  color: var(--lr-primary) !important;
+  opacity: .92;
+}
