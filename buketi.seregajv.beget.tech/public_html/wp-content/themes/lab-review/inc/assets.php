@@ -91,7 +91,16 @@ add_action('wp_enqueue_scripts', function () {
       wp_enqueue_style('lr-catalog', $uri . '/assets/css/catalog.css', ['lr-main'], $v);
     }
   }
+  if (function_exists('is_woocommerce') && (is_woocommerce() || is_cart() || is_checkout() || is_account_page())) {
+    if (file_exists($dir . '/assets/css/product-card.css')) {
+      wp_enqueue_style('lr-product-card', $uri . '/assets/css/product-card.css', ['lr-main'], $v);
+    }
 
+    if (file_exists($dir . '/assets/css/woocommerce.css')) {
+      wp_enqueue_style('lr-woocommerce', $uri . '/assets/css/woocommerce.css', ['lr-main', 'lr-product-card'], $v);
+    }
+  }
+  
 }, 20);
 
 /**
