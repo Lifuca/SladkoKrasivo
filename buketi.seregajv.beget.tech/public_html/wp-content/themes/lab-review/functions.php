@@ -1,19 +1,16 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-$theme_dir = get_template_directory();
+$theme_dir = get_stylesheet_directory();
 
 $includes = [
   '/inc/assets.php',
-  '/inc/woocommerce.php',
   '/inc/shortcodes.php',
 
-  // твои модули (если ты реально их перенёс в inc/)
   '/inc/myaccount-menu.php',
   '/inc/bonuses-system.php',
   '/inc/checkout-fulfillment.php',
   '/inc/checkout-required-fields.php',
-
 ];
 
 foreach ($includes as $rel) {
@@ -22,3 +19,12 @@ foreach ($includes as $rel) {
     require_once $path;
   }
 }
+
+
+
+
+add_filter('woocommerce_breadcrumb_defaults', function ($d) {
+  $d['wrap_before'] = '<nav class="lr-breadcrumbs" aria-label="Breadcrumbs">';
+  $d['wrap_after']  = '</nav>';
+  return $d;
+});
