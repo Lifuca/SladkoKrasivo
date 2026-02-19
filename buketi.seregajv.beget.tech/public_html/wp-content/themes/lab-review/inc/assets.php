@@ -41,6 +41,10 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('lr-product-card', $uri . '/assets/css/product-card.css', ['lr-main'], $v);
   }
 
+  if (file_exists($dir . '/assets/js/product-card.js')) {
+  wp_enqueue_script('lr-product-card', $uri . '/assets/js/product-card.js', [], $v, true);
+  }
+
   /* =========================
      FRONT PAGE ONLY
      ========================= */
@@ -84,23 +88,29 @@ add_action('wp_enqueue_scripts', function () {
   }
 
   /* =========================
-     CATALOG (shop/category/tag)
+     CATALOG (shop/category/tag/product)
      ========================= */
-  if (is_shop() || is_product_taxonomy() || is_product_category() || is_product_tag()) {
-    if (file_exists($dir . '/assets/css/catalog.css')) {
-      wp_enqueue_style('lr-catalog', $uri . '/assets/css/catalog.css', ['lr-main'], $v);
-    }
-  }
-  if (function_exists('is_woocommerce') && (is_woocommerce() || is_cart() || is_checkout() || is_account_page())) {
-    if (file_exists($dir . '/assets/css/product-card.css')) {
-      wp_enqueue_style('lr-product-card', $uri . '/assets/css/product-card.css', ['lr-main'], $v);
-    }
+  $is_shop_context = function_exists('is_woocommerce') && (
+    is_woocommerce() ||
+    is_shop() ||
+    is_product_category() ||
+    is_product_tag() ||
+    is_product_taxonomy() ||
+    is_tax('product_cat') ||
+    is_tax('product_tag') ||
+    is_post_type_archive('product') ||
+    is_singular('product')
+  );
 
-    if (file_exists($dir . '/assets/css/woocommerce.css')) {
-      wp_enqueue_style('lr-woocommerce', $uri . '/assets/css/woocommerce.css', ['lr-main', 'lr-product-card'], $v);
+  if ($is_shop_context) {
+    if (file_exists($dir . '/assets/css/catalog.css')) {
+      wp_enqueue_style('lr-catalog', $uri . '/assets/css/catalog.css', ['lr-main', 'lr-product-card'], $v);
+      wp_enqueue_script('lr-catalog-filters', $uri . '/assets/js/catalog-filters.js', [], $v, true);
     }
   }
-  
+
+
+
 }, 20);
 
 /**

@@ -1,36 +1,264 @@
+/* =====================================================
+   Product card — Lab-Review premium
+   Работает с стандартной разметкой Woo + твоим content-product.php
+   ===================================================== */
+
+.woocommerce ul.products{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.woocommerce ul.products li.product,
 .lr-card{
-  border:1px solid rgba(0,0,0,.08);
-  border-radius:18px;
-  overflow:hidden;
+  list-style:none;
+}
+
+/* CARD */
+.lr-card{
   background:#fff;
-  box-shadow: 0 10px 30px rgba(0,0,0,.04);
+  border-radius: 26px;
+  overflow:hidden;
+  box-shadow: 0 14px 34px rgba(0,0,0,.06);
   transition: transform .18s ease, box-shadow .18s ease;
+  display:flex;
+  flex-direction:column;
 }
+
 .lr-card:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 16px 40px rgba(0,0,0,.06);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 46px rgba(0,0,0,.10);
 }
-.lr-card a{ text-decoration:none; color:inherit; }
 
-.lr-card__body{ padding:14px 14px 12px; }
-.lr-card__title{
-  margin:0 0 8px;
-  font-weight:700;
-  font-size:16px;
-  line-height:1.25;
+/* MEDIA */
+.lr-card__media{
+  position:relative;
+  display:block;
+
+  /* БЫЛО: 1 / 1.08 (высокие)
+     НУЖНО: ниже примерно на 25%:
+     1.08 * 0.75 ≈ 0.81 => делаем 1 / 0.82
+  */
+  aspect-ratio: 1 / 0.82;
+
+  background: rgba(0,0,0,.02);
+  overflow:hidden;
 }
-.lr-card__price{ margin:0 0 12px; font-weight:700; }
-.lr-card__cta .button,
-.lr-card__cta a.button{
+
+.lr-card__media img,
+.lr-card__img{
   width:100%;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:44px;
-  border-radius:14px;
-  text-decoration:none;
+  height:100%;
+  object-fit: cover;
+  display:block;
+  transition: transform .35s ease;
 }
 
-/* если где-то есть overlay — не перехватывает клики */
-.lr-card::before, .lr-card::after{ pointer-events:none; }
-.lr-card__cta{ position:relative; z-index:2; }
+.lr-card:hover .lr-card__media img{
+  transform: scale(1.04);
+}
+
+/* BADGES */
+.lr-card__badge{
+  position:absolute;
+  top:14px;
+  left:14px;
+  z-index:5;
+  padding:8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: .02em;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(0,0,0,.08);
+  backdrop-filter: blur(6px);
+}
+
+/* бонус — оставляем слева сверху (поверх фото) */
+.lr-card__badge--bonus{
+  top: 14px;
+  left: 14px;
+}
+
+/* sale/out можно оставить, но если хочешь — сдвинем вправо */
+.lr-card__badge--sale{
+  background: var(--lr-primary);
+  color:#fff;
+  border-color: var(--lr-primary);
+}
+
+.lr-card__badge--out{
+  background: rgba(0,0,0,.72);
+  color:#fff;
+  border-color: rgba(0,0,0,0);
+}
+
+/* BODY */
+.lr-card__body{
+  padding: 14px 16px 16px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+}
+
+/* TITLE */
+.lr-card__title{
+  text-decoration:none;
+  font-family: var(--lr-font-head);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--lr-heading-color-small);
+  margin:0;
+  display:-webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow:hidden;
+  min-height: calc(18px * 1.2 * 2);
+}
+
+.lr-card__title:hover{
+  color: var(--lr-primary);
+}
+
+/* PRICE */
+.lr-card__price{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* Woo price html */
+.lr-card__price .price{
+  margin:0 !important;
+  font-family: var(--lr-font-text);
+  color: var(--lr-text);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.lr-card__price .price del{
+  opacity:.55;
+  font-weight: 400;
+  font-size: 14px;
+  margin-right: 6px;
+}
+
+.lr-card__price .price ins{
+  background: transparent;
+  text-decoration: none;
+}
+
+/* Hide Woo "sale flash" if theme adds it somewhere */
+.woocommerce span.onsale{
+  display:none !important;
+}
+
+/* BUTTON */
+.lr-card__actions{
+  margin-top: 2px;
+}
+
+.lr-card__actions .button,
+.lr-card__actions a.button{
+  width: 100%;
+  height: 48px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: #f3f3f3;
+  color: #111;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.lr-card__actions .button:hover{
+  background: var(--lr-primary);
+  border-color: var(--lr-primary);
+  color:#fff;
+  transform: translateY(-1px);
+}
+
+/* Small screens */
+@media (max-width: 670px){
+  .lr-card__media{ aspect-ratio: 1 / 0.90; } /* на мобиле чуть выше, чтобы не выглядело плоско */
+  .lr-card__title{ font-size: 16px; min-height: calc(16px * 1.2 * 2); }
+  .lr-card__price .price{ font-size: 18px; }
+}
+
+
+/* =========================================
+   Fix: add-to-cart button alignment + colors
+   ========================================= */
+
+.lr-card__actions .button,
+.lr-card__actions a.button,
+.lr-card__actions button.button{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  height: 48px !important;
+
+  padding: 0 14px !important;
+  line-height: 1 !important;
+
+  border-radius: var(--lr-radius-sm) !important;
+  border: 1px solid var(--lr-line) !important;
+
+  background: #f2f2f2 !important;         /* серый, как в стиле сайта */
+  color: var(--lr-text) !important;
+
+  font-family: var(--lr-font-text) !important;
+  font-weight: 600 !important;
+  letter-spacing: .02em !important;
+
+  text-decoration: none !important;
+  text-align: center !important;
+
+  /* прибиваем фиолетовые/тематические эффекты */
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* если тема добавляет иконку/псевдо-элемент и он смещает текст */
+.lr-card__actions .button::before,
+.lr-card__actions .button::after,
+.lr-card__actions a.button::before,
+.lr-card__actions a.button::after{
+  display: none !important;
+  content: none !important;
+}
+
+/* hover — мягко в твой primary */
+.lr-card__actions .button:hover,
+.lr-card__actions a.button:hover,
+.lr-card__actions button.button:hover{
+  background: var(--lr-primary) !important;
+  border-color: var(--lr-primary) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* состояния Woo, которые часто красятся в фиолетовый темой */
+.lr-card__actions a.add_to_cart_button:visited,
+.lr-card__actions a.added_to_cart:visited{
+  color: var(--lr-text) !important;
+}
+
+.lr-card__actions a.added_to_cart,
+.lr-card__actions a.add_to_cart_button.added{
+  background: #f2f2f2 !important;
+  border-color: var(--lr-line) !important;
+  color: var(--lr-text) !important;
+}
+
+/* focus (фиолетовый outline у браузера/темы) */
+.lr-card__actions .button:focus,
+.lr-card__actions a.button:focus,
+.lr-card__actions button.button:focus{
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(129,129,129,.18) !important; /* под твой --lr-primary */

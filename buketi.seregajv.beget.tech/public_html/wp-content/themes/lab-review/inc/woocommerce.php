@@ -1,36 +1,20 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-/**
- * WooCommerce integration for Lab Review theme.
- */
+// Woo support (если у тебя этого ещё нет)
 add_action('after_setup_theme', function () {
   add_theme_support('woocommerce');
-  add_theme_support('wc-product-gallery-zoom');
-  add_theme_support('wc-product-gallery-lightbox');
-  add_theme_support('wc-product-gallery-slider');
 });
 
-/**
- * Better defaults for catalog grid.
- */
-add_filter('loop_shop_columns', function () {
-  return 4;
-}, 20);
-
-add_filter('loop_shop_per_page', function () {
-  return 12;
-}, 20);
-
-/**
- * Remove sidebar on Woo pages for full-width layout.
- */
-add_action('wp', function () {
-  if (!function_exists('is_woocommerce')) {
-    return;
-  }
-
-  if (is_woocommerce() || is_cart() || is_checkout() || is_account_page()) {
-    remove_action('woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
-  }
+// Сайдбар фильтров каталога
+add_action('widgets_init', function () {
+  register_sidebar([
+    'name'          => 'Фильтры каталога',
+    'id'            => 'lr-shop-filters',
+    'description'   => 'Левая колонка фильтров на страницах каталога WooCommerce',
+    'before_widget' => '<section class="lr-filter">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h4 class="lr-filter__title">',
+    'after_title'   => '</h4>',
+  ]);
 });

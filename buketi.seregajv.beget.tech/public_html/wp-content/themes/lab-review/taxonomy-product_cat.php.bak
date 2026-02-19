@@ -4,7 +4,7 @@ defined('ABSPATH') || exit;
 get_header(); ?>
 
 <main class="lr-main lr-main--shop">
-  <div class="lr-container">
+  <div class="lr-container woocommerce">
     <?php woocommerce_content(); ?>
   </div>
 </main>

@@ -6,6 +6,7 @@ $theme_dir = get_stylesheet_directory();
 $includes = [
   '/inc/assets.php',
   '/inc/shortcodes.php',
+  '/inc/woocommerce.php',
 
   '/inc/myaccount-menu.php',
   '/inc/bonuses-system.php',
@@ -20,11 +21,10 @@ foreach ($includes as $rel) {
   }
 }
 
-
-
-
 add_filter('woocommerce_breadcrumb_defaults', function ($d) {
   $d['wrap_before'] = '<nav class="lr-breadcrumbs" aria-label="Breadcrumbs">';
   $d['wrap_after']  = '</nav>';
   return $d;
 });
+
+
