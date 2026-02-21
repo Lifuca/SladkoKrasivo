@@ -284,12 +284,7 @@
   }
 }
 
-/* Very wide: 4 columns */
-@media (min-width: 1240px){
-  .lr-shop-products ul.products{
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
+
 
 /* Narrow: hide filters, products 2 columns */
 @media (max-width: 920px){
@@ -339,3 +334,17 @@
   }
 }
 
+/* CATALOG: never 1 column — always at least 2 cards per row */
+@media (max-width: 520px){
+  .lr-shop-products ul.products{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+}
+
+/* even narrower — still 2, just tighter */
+@media (max-width: 360px){
+  .lr-shop-products ul.products{
+    gap: 8px !important;
+  }
+}

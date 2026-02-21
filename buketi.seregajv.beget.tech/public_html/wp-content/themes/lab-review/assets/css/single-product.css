@@ -1,19 +1,37 @@
 /* =====================================================
    SINGLE PRODUCT — donor-like layout + responsive steps
-   Container width unchanged (header/footer width)
+   (FULL FILE)
    ===================================================== */
 
 .lr-main--product{ padding: 18px 0 50px; }
 
-/* breadcrumbs — серые */
-.lr-sp-breadcrumbs .woocommerce-breadcrumb{
-  margin: 6px 0 18px;
-  font-size: 13px;
-  color: var(--lr-muted);
-  opacity: .8;
+/* Breadcrumbs: серые, без подчёркивания (включая hover/visited) */
+.lr-sp-breadcrumbs .woocommerce-breadcrumb,
+.lr-sp-breadcrumbs .woocommerce-breadcrumb a,
+.lr-sp-breadcrumbs .woocommerce-breadcrumb span,
+.lr-sp-breadcrumbs .woocommerce-breadcrumb a:visited{
+  color: var(--lr-muted) !important;
+  text-decoration: none !important;
 }
 
-/* hide any theme single-product title duplication */
+/* убираем underline, который может быть через border/shadow */
+.lr-sp-breadcrumbs .woocommerce-breadcrumb a{
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+/* hover — только лёгкая смена прозрачности, без подчёркивания */
+.lr-sp-breadcrumbs .woocommerce-breadcrumb a:hover,
+.lr-sp-breadcrumbs .woocommerce-breadcrumb a:focus-visible{
+  color: var(--lr-muted) !important;
+  text-decoration: none !important;
+  opacity: .7;
+}
+
+
+
+
+/* hide theme duplicate title */
 .woocommerce div.product .product_title{ display:none; }
 
 /* =========================
@@ -22,7 +40,7 @@
 .lr-sp{
   display: grid;
   grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
-  gap: 78px; /* твой "чёткий" отступ */
+  gap: 78px;
   align-items: start;
 }
 .lr-sp__left,
@@ -85,13 +103,13 @@
 .lr-sp-gal__nav--prev{ left: 14px; }
 .lr-sp-gal__nav--next{ right: 14px; }
 
-/* thumbs — всегда по ширине основной картинки */
+/* thumbs */
 .lr-sp-gal__thumbs{
   display: flex;
   gap: 10px;
   margin-top: 12px;
   flex-wrap: wrap;
-  max-width: 520px; /* соответствует ширине левой колонки на десктопе */
+  max-width: 520px;
 }
 .lr-sp-gal__thumb{
   width: 54px;
@@ -143,7 +161,7 @@
 .lr-sp__price{
   font-family: var(--lr-font-head);
   font-size: clamp(28px, 2.8vw, 44px);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--lr-text);
   letter-spacing: .02em;
 }
@@ -176,98 +194,94 @@
   gap: 12px;
   align-items: center;
   margin: 10px 0 10px;
-  flex-wrap: nowrap; /* на десктопе всегда в строку */
+  flex-wrap: nowrap;
 }
-
 .lr-sp__add,
-.lr-btn--ghost{ flex: 1 1 0; min-width: 0; }
+.lr-btn--ghost{
+  flex: 1 1 0;
+  min-width: 0;
+}
 
 /* Hide quantity field */
 .lr-sp__add .quantity,
 .lr-sp__add input.qty{ display: none !important; }
 
-/* =========================
-   Button "volume" like donor:
-   - псевдо-рамка смещена вправо-вниз
-   - на hover объём пропадает
-   - шрифт тоньше
-   - серый темнее
-   ========================= */
-
+/* =====================================================
+   BUTTONS — EXACT behavior + volume
+   Cart:  dark bg + white text -> hover: white bg + gray text
+   Combo: white bg + gray text -> hover: dark bg + white text
+   Volume: visible idle, disappears on hover
+   Border: always visible
+   ===================================================== */
 :root{
-  --lr-btn-dark: #5f5f5f;      /* темнее, чем --lr-primary */
-  --lr-btn-border: #6a6a6a;    /* тонкая обводка */
-  --lr-btn-volume: rgba(0,0,0,.35);
-  --lr-btn-volume-offset: 3px;
-  --lr-btn-radius: 999px;
+  --lr-btn-c: #525252;
+  --lr-btn-h: 50px;
+  --lr-btn-r: 15px;
+  --lr-btn-off: 3px;
+  --lr-btn-font: 16px;
+  --lr-btn-ls: .03em;
+  --lr-btn-t: cubic-bezier(0.35, 0, 0, 1.01);
 }
 
+/* base */
 .lr-sp__add .single_add_to_cart_button,
 .lr-btn{
-  position: relative;
-  border-radius: var(--lr-btn-radius);
-  padding: 14px 18px;
-  cursor: pointer;
-  font-family: var(--lr-font-head);
-  font-weight: 400;                 /* тоньше */
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  white-space: nowrap;
-  transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  height:var(--lr-btn-h) !important;
+  width:100% !important;
+  padding:0 !important;
+
+  font-family:var(--lr-font-text) !important;
+  font-size:var(--lr-btn-font) !important;
+  font-weight:400 !important;
+  line-height:22px !important;
+  letter-spacing:var(--lr-btn-ls) !important;
+  text-transform:uppercase !important;
+
+  border-radius:var(--lr-btn-r) !important;
+  border:1px solid var(--lr-btn-c) !important; /* always */
+  outline:none !important;
+  cursor:pointer !important;
+
+  /* volume in idle */
+  box-shadow: var(--lr-btn-off) var(--lr-btn-off) 0 0 var(--lr-btn-c) !important;
+
+  transition:
+    background-color .25s var(--lr-btn-t),
+    color .25s var(--lr-btn-t),
+    border-color .25s var(--lr-btn-t),
+    box-shadow .25s var(--lr-btn-t) !important;
 }
 
-/* "объёмная рамка" */
-.lr-sp__add .single_add_to_cart_button::after,
-.lr-btn::after{
-  content:"";
-  position:absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 1px solid var(--lr-btn-border);
-  transform: translate(var(--lr-btn-volume-offset), var(--lr-btn-volume-offset));
-  pointer-events: none;
-  transition: opacity .18s ease, transform .18s ease;
-  opacity: 1;
-}
-
-/* СЕРАЯ (Add to cart) */
+/* CART default: dark + white */
 .lr-sp__add .single_add_to_cart_button{
-  width: 100% !important;
-  border: 1px solid var(--lr-btn-dark) !important;
-  background: var(--lr-btn-dark) !important; /* темнее */
+  background: var(--lr-btn-c) !important;
   color: #fff !important;
-  box-shadow: none !important;
 }
 
-/* БЕЛАЯ (ghost) */
-.lr-btn--ghost{
-  width: 100%;
-  background: #fff;
-  border: 1px solid var(--lr-btn-border);
-  color: var(--lr-btn-dark);
-}
-
-/* hover swap (инверсия) + убрать объём */
+/* CART hover: white + gray, volume off */
 .lr-sp__add .single_add_to_cart_button:hover,
 .lr-sp__add .single_add_to_cart_button:focus-visible{
-  background: #fff !important;
-  color: var(--lr-btn-dark) !important;
-  border-color: var(--lr-btn-border) !important;
-}
-.lr-btn--ghost:hover,
-.lr-btn--ghost:focus-visible{
-  background: var(--lr-btn-dark);
-  color: #fff;
-  border-color: var(--lr-btn-dark);
+  background:#fff !important;
+  color:var(--lr-btn-c) !important;
+  box-shadow:0 0 0 0 transparent !important;
 }
 
-/* объём исчезает на hover/focus */
-.lr-sp__add .single_add_to_cart_button:hover::after,
-.lr-sp__add .single_add_to_cart_button:focus-visible::after,
-.lr-btn:hover::after,
-.lr-btn:focus-visible::after{
-  opacity: 0;
-  transform: translate(0,0);
+/* COMBO default: white + gray */
+.lr-btn--ghost{
+  background:#fff !important;
+  color:var(--lr-btn-c) !important;
+}
+
+/* COMBO hover: dark + white, volume off */
+.lr-btn--ghost:hover,
+.lr-btn--ghost:focus-visible{
+  background:var(--lr-btn-c) !important;
+  color:#fff !important;
+  box-shadow:0 0 0 0 transparent !important;
 }
 
 /* note under buttons */
@@ -307,13 +321,12 @@
 }
 
 /* =====================================================
-   RESPONSIVE STEPS (как ты описал)
-   1) <1250: кнопки друг под друга, правый блок уже
-   2) <1000: фото меньше, миниатюры меньше
-   3) <700: фото на всю ширину, правый блок под фото
+   RESPONSIVE STEPS
+   1) <1250: buttons column, right block narrower
+   2) <1000: photo smaller + thumbs smaller
+   3) <700: photo full width, right block below
    ===================================================== */
 
-/* 1) до 1250: сохраняем 2 колонки, но делаем правый блок уже + кнопки колонкой */
 @media (max-width: 1250px){
   .lr-sp{
     grid-template-columns: minmax(0, 520px) minmax(0, 380px);
@@ -324,11 +337,9 @@
     align-items: stretch;
     gap: 10px;
   }
-  .lr-sp__add, .lr-btn--ghost{ flex: 0 0 auto; }
   .lr-sp-gal__thumbs{ max-width: 520px; }
 }
 
-/* 2) до 1000: уменьшаем фото (но всё ещё 2 колонки) */
 @media (max-width: 1000px){
   .lr-sp{
     grid-template-columns: minmax(0, 440px) minmax(0, 360px);
@@ -345,23 +356,476 @@
   }
 }
 
-/* 3) до 700: фото во всю ширину, правый блок вниз */
 @media (max-width: 700px){
   .lr-sp{
     grid-template-columns: 1fr;
     gap: 18px;
   }
   .lr-sp-gal__img{
-    height: clamp(300px, 78vw, 520px); /* можно крупнее на мобиле */
+    height: clamp(300px, 78vw, 520px);
   }
   .lr-sp-gal__thumbs{ max-width: 100%; }
   .lr-sp-gal__thumb{ width: 44px; height: 44px; }
   .lr-sp__actions{ margin-top: 8px; }
 }
 
-/* чуть компактнее на очень маленьких */
 @media (max-width: 420px){
   .lr-sp-gal__thumb{ width: 40px; height: 40px; }
-  .lr-sp__add .single_add_to_cart_button,
-  .lr-btn{ padding: 13px 14px; }
+}
+
+
+/* =========================
+   Reference 4-card block
+   ========================= */
+.lr-sp-ref{
+  margin: 56px 0 34px;
+}
+.lr-sp-ref__grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+.lr-sp-ref__item{ margin: 0; }
+.lr-sp-ref__imgwrap{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f3f3f3;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.lr-sp-ref__img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.lr-sp-ref__cap{
+  margin-top: 12px;
+  text-align: center;
+  font-family: var(--lr-font-text);
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--lr-text);
+}
+
+/* =========================
+   Info blocks (top icons + 2x2 text) — LIKE DONOR
+   - all grey
+   - icons grey
+   - headings thinner
+   ========================= */
+.lr-sp-info{
+  margin: 60px 0 46px;
+  color: var(--lr-btn-c) !important;
+}
+.lr-sp-info *{ color: inherit; }
+
+.lr-sp-info__top{
+  padding: 14px 0 34px;
+  border-top: 1px solid var(--lr-line);
+}
+.lr-sp-info__topgrid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 34px;
+  align-items: start;
+  text-align: center;
+}
+.lr-sp-info__ico{
+  font-size: 22px;
+  line-height: 1;
+  margin-bottom: 12px;
+  color: var(--lr-btn-c) !important;
+  opacity: .85;
+  filter: grayscale(1);
+}
+.lr-sp-info__t{
+  font-family: var(--lr-font-text) !important;
+  font-weight: 400 !important;
+  font-size: 16px;
+  letter-spacing: .03em;
+  text-transform: none;
+  margin-bottom: 8px;
+  color: var(--lr-btn-c) !important;
+}
+.lr-sp-info__d{
+  font-family: var(--lr-font-text) !important;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--lr-btn-c) !important;
+  opacity: .85;
+}
+
+.lr-sp-info__bottom{
+  border-top: 1px solid var(--lr-line);
+  padding-top: 44px;
+}
+.lr-sp-info__grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 80px;
+  row-gap: 46px;
+  position: relative;
+}
+.lr-sp-info__grid::before{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--lr-line);
+  transform: translateX(-.5px);
+}
+.lr-sp-info__h{
+  margin: 0 0 14px;
+  font-family: var(--lr-font-text) !important;
+  font-weight: 400 !important;
+  font-size: 28px;
+  letter-spacing: .02em;
+  color: var(--lr-btn-c) !important;
+}
+.lr-sp-info__p{
+  margin: 0;
+  font-family: var(--lr-font-text) !important;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--lr-btn-c) !important;
+  opacity: .85;
+}
+
+/* =========================
+   RESPONSIVE STEPS
+   1) <1250: buttons column, right block narrower
+   2) <1100: ref/info grids 2 columns
+   3) <1000: photo smaller + thumbs smaller
+   4) <700: single column sections
+   ========================= */
+
+@media (max-width: 1250px){
+  .lr-sp{
+    grid-template-columns: minmax(0, 520px) minmax(0, 380px);
+    gap: 56px;
+  }
+  .lr-sp__actions{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .lr-sp-gal__thumbs{ max-width: 520px; }
+}
+
+@media (max-width: 1100px){
+  .lr-sp-ref__grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lr-sp-info__topgrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lr-sp-info__grid{ column-gap: 46px; }
+}
+
+@media (max-width: 1000px){
+  .lr-sp{
+    grid-template-columns: minmax(0, 440px) minmax(0, 360px);
+    gap: 42px;
+  }
+  .lr-sp-gal__img{
+    height: clamp(270px, 34vw, 380px);
+  }
+  .lr-sp-gal__thumbs{ max-width: 440px; }
+  .lr-sp-gal__thumb{
+    width: 46px;
+    height: 46px;
+    border-radius: 9px;
+  }
+}
+
+@media (max-width: 700px){
+  .lr-sp{
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .lr-sp-gal__img{
+    height: clamp(300px, 78vw, 520px);
+  }
+  .lr-sp-gal__thumbs{ max-width: 100%; }
+  .lr-sp-gal__thumb{ width: 44px; height: 44px; }
+  .lr-sp__actions{ margin-top: 8px; }
+
+  .lr-sp-ref{ margin: 34px 0 20px; }
+  .lr-sp-ref__grid{ grid-template-columns: 1fr; gap: 18px; }
+
+  .lr-sp-info__topgrid{ grid-template-columns: 1fr; gap: 22px; }
+
+  .lr-sp-info__grid{
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+  .lr-sp-info__grid::before{ display:none; }
+  .lr-sp-info__h{ font-size: 22px; }
+}
+
+@media (max-width: 420px){
+  .lr-sp-gal__thumb{ width: 40px; height: 40px; }
+}
+
+
+
+
+body.single-product .lr-sp-breadcrumbs,
+body.single-product .lr-sp-breadcrumbs a{
+  color: #818181 !important;
+  text-decoration: none !important;
+}
+
+/* space between breadcrumbs and product block (image) */
+body.single-product .lr-sp-breadcrumbs{
+  margin-bottom: 22px; /* поменяй на 16/24/32 как нужно */
+}
+
+/* FIX: ghost button keeps same height when stacked (<1250) */
+@media (max-width: 1250px){
+  .lr-sp__actions .lr-btn--ghost{
+    height: var(--lr-btn-h) !important;
+    min-height: var(--lr-btn-h) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    line-height: 22px !important;
+  }
+}
+
+/* =====================================================
+   RELATED PRODUCTS — responsive grid + mobile card (≤470)
+   ===================================================== */
+
+/* Grid for related (single product only) */
+body.single-product .related ul.products{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  gap: 18px;
+
+  /* default */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Woo clearfix pseudo-elements can break grid */
+body.single-product .related ul.products::before,
+body.single-product .related ul.products::after{
+  content: none !important;
+  display: none !important;
+}
+
+body.single-product .related ul.products li.product{
+  width: auto !important;
+  float: none !important;
+  margin: 0 !important;
+}
+
+/* 2 columns on smaller screens */
+@media (max-width: 920px){
+  body.single-product .related ul.products{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+/* IMPORTANT: below 470px still 2 columns (never 1 column) */
+@media (max-width: 470px){
+  body.single-product .related ul.products{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  /* ===== Mobile card look like your screenshot ===== */
+
+  body.single-product .related .lr-card{
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: none;
+    border: 1px solid rgba(0,0,0,10);
+    background: #fff;
+    transform: none !important;
+  }
+
+  /* Image block */
+  body.single-product .related .lr-card__media{
+    aspect-ratio: 1 / 1;
+    border-radius: 0;
+  }
+
+  /* Bottom compartment */
+  body.single-product .related .lr-card__body{
+    padding: 10px 10px 10px;
+    border-top: 1px solid rgba(0,0,0,08);
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title title"
+      "price cart";
+    row-gap: 8px;
+    column-gap: 10px;
+  }
+
+  /* Title centered */
+  body.single-product .related .lr-card__title{
+    grid-area: title;
+    text-align: center;
+    font-family: var(--lr-font-text);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
+    min-height: unset;
+    -webkit-line-clamp: 2;
+  }
+
+  /* Price block: current bold, old below light */
+  body.single-product .related .lr-card__price{
+    grid-area: price;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+
+  body.single-product .related .lr-card__price .price{
+    margin: 0 !important;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+  }
+
+  /* current price */
+  body.single-product .related .lr-card__price .price ins{
+    order: 1;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    background: transparent;
+  }
+
+  /* old price under (very light) */
+  body.single-product .related .lr-card__price .price del{
+    order: 2;
+    margin: 4px 0 0 !important;
+    opacity: .28;
+    font-weight: 400;
+    font-size: 12px;
+  }
+
+  /* If no discount (no del/ins), keep it bold-ish */
+  body.single-product .related .lr-card__price .price > .woocommerce-Price-amount{
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  /* Cart button — small icon button on the right */
+  body.single-product .related .lr-card__actions{
+    grid-area: cart;
+    margin: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  body.single-product .related .lr-card__actions .button,
+  body.single-product .related .lr-card__actions a.button,
+  body.single-product .related .lr-card__actions button.button{
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+
+    padding: 0 !important;
+    border-radius: 10px !important;
+
+    background: #fff !important;
+    border: 1px solid rgba(0,0,0,18) !important;
+    color: #525252 !important;
+
+    font-size: 0 !important;          /* hide text */
+    line-height: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  /* Restore our own cart icon (because product-card.css kills ::before) */
+  body.single-product .related .lr-card__actions .button::before,
+  body.single-product .related .lr-card__actions a.button::before,
+  body.single-product .related .lr-card__actions button.button::before{
+    display: block !important;
+    content: "" !important;
+    width: 16px;
+    height: 16px;
+    margin: 0 auto;
+
+    background-color: currentColor;
+
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2ZM7.2 14h9.9c.75 0 1.4-.41 1.74-1.03L21 6H7.42L6.7 4H3v2h2l3.6 7.59-1.35 2.44C6.52 17.37 7.48 19 9 19h12v-2H9l1.1-2Z'/></svg>") center / contain no-repeat;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2ZM7.2 14h9.9c.75 0 1.4-.41 1.74-1.03L21 6H7.42L6.7 4H3v2h2l3.6 7.59-1.35 2.44C6.52 17.37 7.48 19 9 19h12v-2H9l1.1-2Z'/></svg>") center / contain no-repeat;
+  }
+
+  body.single-product .related .lr-card__actions .button:hover,
+  body.single-product .related .lr-card__actions a.button:hover,
+  body.single-product .related .lr-card__actions button.button:hover{
+    background: #f6f6f6 !important;
+    border-color: rgba(0,0,0,22) !important;
+  }
+}
+
+/* =====================================================
+   FORCE GRIDS:
+   - 4 pictures: 4 cols OR 2x2, never 1 col
+   - 4 USPs: always 2x2, never 1 col
+   ===================================================== */
+
+/* 4 pictures (lr-sp-ref): default 4 in a row */
+.lr-sp-ref__grid{
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+/* if screen is too narrow -> strict 2x2 (never 1 col) */
+@media (max-width: 1100px){
+  .lr-sp-ref__grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* never allow 1 column even on small screens */
+@media (max-width: 700px){
+  .lr-sp-ref__grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+  .lr-sp-ref__cap{
+    font-size: 14px !important;
+  }
+}
+
+/* 4 USPs (lr-sp-info top): ALWAYS 2x2 */
+.lr-sp-info__topgrid{
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 26px !important;
+  text-align: center;
+}
+
+/* keep 2x2 even on phones */
+@media (max-width: 700px){
+  .lr-sp-info__topgrid{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+  .lr-sp-info__t{ font-size: 14px !important; }
+  .lr-sp-info__d{ font-size: 12px !important; }
+  .lr-sp-info__ico{ font-size: 20px !important; }
+}
+
+/* super narrow: still 2 columns, just tighter */
+@media (max-width: 360px){
+  .lr-sp-info__topgrid{ gap: 12px !important; }
+  .lr-sp-ref__grid{ gap: 10px !important; }
+  .lr-sp-ref__cap{ font-size: 13px !important; }
 }

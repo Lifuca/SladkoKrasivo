@@ -110,20 +110,38 @@ add_action('wp_enqueue_scripts', function () {
     }
   }
 
-  /* =========================
+    /* =========================
      SINGLE PRODUCT
      ========================= */
   if (function_exists('is_product') && is_product()) {
 
     if (file_exists($dir . '/assets/css/single-product.css')) {
-      // ВАЖНО: грузим ПОСЛЕ lr-main и product-card, чтобы сингл мог перебить общие правила
       wp_enqueue_style('lr-single-product', $uri . '/assets/css/single-product.css', ['lr-main', 'lr-product-card'], $v);
+    }
+
+    // ВАЖНО: эти стили должны быть ПОСЛЕ single-product.css
+    if (file_exists($dir . '/assets/css/yandex-reviews.css')) {
+      wp_enqueue_style('lr-yandex-reviews', $uri . '/assets/css/yandex-reviews.css', ['lr-single-product'], $v);
+    }
+
+        // Combo modal
+    if (file_exists($dir . '/assets/css/combo-modal.css')) {
+      wp_enqueue_style('lr-combo-modal', $uri . '/assets/css/combo-modal.css', ['lr-single-product'], $v);
+    }
+    if (file_exists($dir . '/assets/js/combo-modal.js')) {
+      wp_enqueue_script('lr-combo-modal', $uri . '/assets/js/combo-modal.js', [], $v, true);
+    }
+
+
+    if (file_exists($dir . '/assets/css/dual-promo.css')) {
+      wp_enqueue_style('lr-dual-promo', $uri . '/assets/css/dual-promo.css', ['lr-single-product'], $v);
     }
 
     if (file_exists($dir . '/assets/js/single-product.js')) {
       wp_enqueue_script('lr-single-product', $uri . '/assets/js/single-product.js', [], $v, true);
     }
   }
+
 
 
 

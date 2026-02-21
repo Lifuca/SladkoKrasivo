@@ -117,3 +117,92 @@ add_action('wp_head', function () {
     ." -->\n";
 }, 999999);
 
+
+
+// 1) Хук: применяем скидку к позициям корзины, помеченным как combo
+add_action('woocommerce_before_calculate_totals', function ($cart) {
+  if (is_admin() && !defined('DOING_AJAX')) return;
+  if (!$cart) return;
+
+  foreach ($cart->get_cart() as $cart_item_key => &$item) {
+    if (empty($item['lr_combo_pct'])) continue;
+
+    $pct = (float) $item['lr_combo_pct'];
+    if ($pct <= 0) continue;
+
+    // запоминаем исходную цену один раз
+    if (!isset($item['lr_combo_orig_price'])) {
+      $item['lr_combo_orig_price'] = (float) $item['data']->get_price();
+    }
+
+    $orig = (float) $item['lr_combo_orig_price'];
+    $new  = $orig * (1 - $pct / 100);
+
+    // Woo сам округлит по настройкам валюты, но лучше отдать с 2 знаками
+    $item['data']->set_price(round($new, 2));
+  }
+}, 20, 1);
+
+
+// 2) AJAX: добавить base + picked как combo-набор
+add_action('wp_ajax_lr_combo_add_to_cart', 'lr_combo_add_to_cart_ajax');
+add_action('wp_ajax_nopriv_lr_combo_add_to_cart', 'lr_combo_add_to_cart_ajax');
+
+function lr_combo_add_to_cart_ajax() {
+  if (!function_exists('WC')) {
+    wp_send_json_error(['message' => 'WooCommerce not loaded']);
+  }
+
+  $nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
+  if (!wp_verify_nonce($nonce, 'lr_combo_nonce')) {
+    wp_send_json_error(['message' => 'Bad nonce']);
+  }
+
+  $base_id = isset($_POST['base_id']) ? absint($_POST['base_id']) : 0;
+  $picked  = isset($_POST['picked_ids']) ? (array) $_POST['picked_ids'] : [];
+  $picked  = array_values(array_filter(array_map('absint', $picked)));
+
+  $pct = isset($_POST['pct']) ? (float) $_POST['pct'] : 0.0;
+  if ($pct < 0) $pct = 0;
+  if ($pct > 50) $pct = 50; // защита от мусора
+
+  if (!$base_id) {
+    wp_send_json_error(['message' => 'No base product']);
+  }
+
+  $ids = array_values(array_unique(array_filter(array_merge([$base_id], $picked))));
+  $group = 'lrcombo_' . wp_generate_uuid4();
+
+  // убедимся что корзина инициализирована
+  if (!WC()->cart) wc_load_cart();
+
+  $added = [];
+
+  foreach ($ids as $pid) {
+    $product = wc_get_product($pid);
+    if (!$product) continue;
+
+    // если вдруг попался variable — лучше редиректить на карточку (как стандартный wc-ajax)
+    if ($product->is_type('variable')) {
+      wp_send_json_error([
+        'redirect' => get_permalink($pid),
+        'message'  => 'Variable product requires selection'
+      ]);
+    }
+
+    $cart_item_data = [
+      'lr_combo_pct'   => $pct,
+      'lr_combo_group' => $group,
+      // чтобы не склеивалось с обычным добавлением
+      'unique_key'     => md5($group . '|' . $pid . '|' . microtime(true)),
+    ];
+
+    $key = WC()->cart->add_to_cart($pid, 1, 0, [], $cart_item_data);
+    if ($key) $added[] = $pid;
+  }
+
+  wp_send_json_success([
+    'added' => $added,
+    'pct'   => $pct,
+  ]);
+}

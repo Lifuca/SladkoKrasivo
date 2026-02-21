@@ -1,49 +1,76 @@
-/* =====================================================
-   Product card — Lab-Review premium
-   Работает с стандартной разметкой Woo + твоим content-product.php
-   ===================================================== */
+/* ===========================
+   PRODUCT CARD — FINAL
+   Desktop/Tablet: "invisible" card + hover borders + bottom button
+   Mobile V2 (<=470): compartment layout + cart icon always visible
+   =========================== */
 
-.woocommerce ul.products{
-  list-style:none;
-  padding:0;
-  margin:0;
+/* ---------- Shared variables ---------- */
+:root{
+  --lr-card-img-radius: 22px;
+  --lr-card-btn-radius: 22px;
+  --lr-card-btn-h: 56px;
+
+  /* боковые линии не доходят до скругления кнопки */
+  --lr-card-line-gap: 18px; /* как у тебя сейчас; можно 12–24 */
+
+  --lr-card-line-color: rgba(0,0,0,.18);
+
+  --lr-btn-bg: #5a5a5a;
+  --lr-btn-fg: #fff;
+
+  /* badge */
+  --lr-badge-bg: rgba(255,255,255,.82);
+  --lr-badge-bd: rgba(0,0,0,.08);
+  --lr-badge-gray: #6e6e6e;
 }
 
-.woocommerce ul.products li.product,
+/* ===========================
+   BASE (Desktop/Tablet)
+   =========================== */
+
+/* Карточка невидимая: без теней/границ/подложки */
 .lr-card{
-  list-style:none;
+  position: relative;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
 }
 
-/* CARD */
-.lr-card{
-  background:#fff;
-  border-radius: 26px;
-  overflow:hidden;
-  box-shadow: 0 14px 34px rgba(0,0,0,.06);
-  transition: transform .18s ease, box-shadow .18s ease;
-  display:flex;
-  flex-direction:column;
-}
-
-.lr-card:hover{
-  transform: translateY(-4px);
-  box-shadow: 0 18px 46px rgba(0,0,0,.10);
-}
-
-/* MEDIA */
+/* MEDIA квадрат */
 .lr-card__media{
-  position:relative;
-  display:block;
-
-  /* БЫЛО: 1 / 1.08 (высокие)
-     НУЖНО: ниже примерно на 25%:
-     1.08 * 0.75 ≈ 0.81 => делаем 1 / 0.82
-  */
-  aspect-ratio: 1 / 0.82;
-
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--lr-card-img-radius);
   background: rgba(0,0,0,.02);
-  overflow:hidden;
+  user-select: none;
+  transition: border-radius .18s ease;
 }
+
+/* Hover: нижние углы картинки становятся 90° */
+.lr-card:hover .lr-card__media,
+.lr-card:focus-within .lr-card__media{
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* slider */
+.lr-card__track{
+  width:100%;
+  height:100%;
+  display:flex;
+  transform: translate3d(0,0,0);
+  transition: transform .22s ease;
+  touch-action: pan-y;
+  cursor: grab;
+}
+.lr-card.is-grabbing .lr-card__track{ cursor: grabbing; }
+.lr-card__track.is-dragging{ transition: none; }
+
+.lr-card__slide{ flex:0 0 100%; width:100%; height:100%; }
 
 .lr-card__media img,
 .lr-card__img{
@@ -51,215 +78,459 @@
   height:100%;
   object-fit: cover;
   display:block;
-  transition: transform .35s ease;
+  pointer-events:none;
 }
 
-.lr-card:hover .lr-card__media img{
-  transform: scale(1.04);
+/* dots */
+.lr-card__dots{
+  position:absolute;
+  left:50%;
+  bottom:12px;
+  transform:translateX(-50%);
+  z-index:6;
+  display:flex;
+  gap:8px;
+}
+.lr-card__dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  border:0;
+  padding:0;
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+}
+.lr-card__dot.is-active{
+  background: rgba(0,0,0,.65);
+  box-shadow:none;
 }
 
-/* BADGES */
+/* бонусы */
 .lr-card__badge{
   position:absolute;
-  top:14px;
-  left:14px;
-  z-index:5;
-  padding:8px 12px;
-  border-radius: 999px;
+  top:12px;
+  left:12px;
+  z-index:7;
+
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:8px 10px;
+  border-radius:999px;
+
+  background: var(--lr-badge-bg);
+  border: 1px solid var(--lr-badge-bd);
+  backdrop-filter: blur(6px);
+
   font-size: 12px;
   line-height: 1;
-  letter-spacing: .02em;
-  background: rgba(255,255,255,.92);
-  border: 1px solid rgba(0,0,0,.08);
-  backdrop-filter: blur(6px);
+}
+.lr-card__badge-plus{
+  color:#111;
+  font-weight:600;
+}
+.lr-card__badge-val{
+  color: var(--lr-badge-gray);
+  font-weight:500;
+}
+.lr-card__badge-ico{
+  color: var(--lr-badge-gray);
+  display:inline-flex;
+  align-items:center;
 }
 
-/* бонус — оставляем слева сверху (поверх фото) */
-.lr-card__badge--bonus{
-  top: 14px;
-  left: 14px;
-}
-
-/* sale/out можно оставить, но если хочешь — сдвинем вправо */
-.lr-card__badge--sale{
-  background: var(--lr-primary);
-  color:#fff;
-  border-color: var(--lr-primary);
-}
-
-.lr-card__badge--out{
-  background: rgba(0,0,0,.72);
-  color:#fff;
-  border-color: rgba(0,0,0,0);
-}
-
-/* BODY */
+/* BODY: место под кнопку зарезервировано => нет роста высоты */
 .lr-card__body{
-  padding: 14px 16px 16px;
+  position: relative;
   display:flex;
   flex-direction:column;
-  gap: 10px;
+  align-items:center;
+  text-align:center;
+
+  background: transparent;
+  padding: 16px 0 0;
 }
 
-/* TITLE */
+/* ВАЖНО: ТИПОГРАФИКУ НЕ ТРОГАЕМ
+   (никаких font-family/weight/size тут нет) */
 .lr-card__title{
-  text-decoration:none;
-  font-family: var(--lr-font-head);
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 1.2;
-  color: var(--lr-heading-color-small);
-  margin:0;
   display:-webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow:hidden;
-  min-height: calc(18px * 1.2 * 2);
+
+  text-decoration:none;
+  padding: 0 10px;
+  margin: 0 0 10px 0;
 }
 
-.lr-card__title:hover{
-  color: var(--lr-primary);
-}
-
-/* PRICE */
 .lr-card__price{
-  display:flex;
-  align-items:baseline;
-  gap:10px;
-  flex-wrap:wrap;
+  padding: 0 10px;
+  margin-bottom: 14px;
 }
-
-/* Woo price html */
 .lr-card__price .price{
   margin:0 !important;
-  font-family: var(--lr-font-text);
-  color: var(--lr-text);
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.1;
 }
 
-.lr-card__price .price del{
-  opacity:.55;
-  font-weight: 400;
-  font-size: 14px;
-  margin-right: 6px;
-}
-
-.lr-card__price .price ins{
-  background: transparent;
-  text-decoration: none;
-}
-
-/* Hide Woo "sale flash" if theme adds it somewhere */
-.woocommerce span.onsale{
-  display:none !important;
-}
-
-/* BUTTON */
+/* ACTIONS: кнопка — дно, но скрыта до hover */
 .lr-card__actions{
-  margin-top: 2px;
-}
-
-.lr-card__actions .button,
-.lr-card__actions a.button{
   width: 100%;
-  height: 48px;
-  border-radius: 16px;
-  border: 1px solid rgba(0,0,0,.10);
-  background: #f3f3f3;
-  color: #111;
-  font-weight: 600;
-  letter-spacing: .02em;
-  transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+  height: var(--lr-card-btn-h);
+  margin: 0;
+  padding: 0;
 }
-
-.lr-card__actions .button:hover{
-  background: var(--lr-primary);
-  border-color: var(--lr-primary);
-  color:#fff;
-  transform: translateY(-1px);
-}
-
-/* Small screens */
-@media (max-width: 670px){
-  .lr-card__media{ aspect-ratio: 1 / 0.90; } /* на мобиле чуть выше, чтобы не выглядело плоско */
-  .lr-card__title{ font-size: 16px; min-height: calc(16px * 1.2 * 2); }
-  .lr-card__price .price{ font-size: 18px; }
-}
-
-
-/* =========================================
-   Fix: add-to-cart button alignment + colors
-   ========================================= */
 
 .lr-card__actions .button,
 .lr-card__actions a.button,
 .lr-card__actions button.button{
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
   width: 100% !important;
-  height: 48px !important;
+  height: var(--lr-card-btn-h) !important;
 
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  margin: 0 !important;
   padding: 0 14px !important;
-  line-height: 1 !important;
 
-  border-radius: var(--lr-radius-sm) !important;
-  border: 1px solid var(--lr-line) !important;
+  border: 0 !important;
+  border-radius: 0 0 var(--lr-card-btn-radius) var(--lr-card-btn-radius) !important;
 
-  background: #f2f2f2 !important;         /* серый, как в стиле сайта */
-  color: var(--lr-text) !important;
+  background: var(--lr-btn-bg) !important;
+  color: var(--lr-btn-fg) !important;
 
-  font-family: var(--lr-font-text) !important;
-  font-weight: 600 !important;
-  letter-spacing: .02em !important;
+  text-decoration:none !important;
+  box-shadow:none !important;
 
-  text-decoration: none !important;
-  text-align: center !important;
+  /* скрыто по умолчанию — но место под кнопку есть */
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
 
-  /* прибиваем фиолетовые/тематические эффекты */
-  box-shadow: none !important;
-  outline: none !important;
+  transition: opacity .18s ease, transform .18s ease;
 }
 
-/* если тема добавляет иконку/псевдо-элемент и он смещает текст */
+/* убрать псевдо элементы темы на кнопке */
 .lr-card__actions .button::before,
 .lr-card__actions .button::after,
 .lr-card__actions a.button::before,
 .lr-card__actions a.button::after{
-  display: none !important;
-  content: none !important;
+  display:none !important;
+  content:none !important;
 }
 
-/* hover — мягко в твой primary */
-.lr-card__actions .button:hover,
-.lr-card__actions a.button:hover,
-.lr-card__actions button.button:hover{
-  background: var(--lr-primary) !important;
-  border-color: var(--lr-primary) !important;
-  color: #fff !important;
-  transform: translateY(-1px);
+/* hover: показать кнопку */
+.lr-card:hover .lr-card__actions .button,
+.lr-card:focus-within .lr-card__actions .button,
+.lr-card:hover .lr-card__actions a.button,
+.lr-card:focus-within .lr-card__actions a.button,
+.lr-card:hover .lr-card__actions button.button,
+.lr-card:focus-within .lr-card__actions button.button{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
-/* состояния Woo, которые часто красятся в фиолетовый темой */
-.lr-card__actions a.add_to_cart_button:visited,
-.lr-card__actions a.added_to_cart:visited{
-  color: var(--lr-text) !important;
+/* боковые линии: только на hover, и НЕ доходят до скругления кнопки */
+.lr-card__body::before,
+.lr-card__body::after{
+  content:"";
+  position:absolute;
+  top: 0;
+  bottom: var(--lr-card-line-gap);
+  width:1px;
+  background: var(--lr-card-line-color);
+  pointer-events:none;
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+.lr-card__body::before{ left: 0; }
+.lr-card__body::after{ right: 0; }
+
+.lr-card:hover .lr-card__body::before,
+.lr-card:hover .lr-card__body::after,
+.lr-card:focus-within .lr-card__body::before,
+.lr-card:focus-within .lr-card__body::after{
+  opacity: 1;
 }
 
-.lr-card__actions a.added_to_cart,
-.lr-card__actions a.add_to_cart_button.added{
-  background: #f2f2f2 !important;
-  border-color: var(--lr-line) !important;
-  color: var(--lr-text) !important;
+/* убрать onsale */
+.woocommerce span.onsale{ display:none !important; }
+
+/* tablet/mobile tweaks (общие) */
+@media (max-width: 670px){
+  :root{
+    --lr-card-img-radius: 18px;
+    --lr-card-btn-radius: 18px;
+    --lr-card-btn-h: 52px;
+  }
 }
 
-/* focus (фиолетовый outline у браузера/темы) */
-.lr-card__actions .button:focus,
-.lr-card__actions a.button:focus,
-.lr-card__actions button.button:focus{
-  outline: none !important;
-  box-shadow: 0 0 0 3px rgba(129,129,129,.18) !important; /* под твой --lr-primary */
+/* =====================================================
+   PRODUCT CARD — MOBILE V2 (≤470)
+   Catalog: .lr-shop-products
+   Related: body.single-product .related
+   ===================================================== */
+
+@media (max-width: 470px){
+
+  /* FORCE 2-per-row */
+  .lr-shop-products ul.products,
+  body.single-product .related ul.products{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  /* card look in V2: белая карточка с лёгкой рамкой (как у тебя в V2) */
+  .lr-shop-products .lr-card,
+  body.single-product .related .lr-card{
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,.10);
+    background: #fff;
+    box-shadow: none;
+  }
+
+  /* image in V2: без радиуса, потому что карточка сама скруглена */
+  .lr-shop-products .lr-card__media,
+  body.single-product .related .lr-card__media{
+    border-radius: 0;
+  }
+
+  /* В V2 hover-логика (линии/кнопка-дно) не нужна */
+  .lr-shop-products .lr-card__body::before,
+  .lr-shop-products .lr-card__body::after,
+  body.single-product .related .lr-card__body::before,
+  body.single-product .related .lr-card__body::after{
+    display: none !important;
+  }
+
+  /* body as compartment */
+  .lr-shop-products .lr-card__body,
+  body.single-product .related .lr-card__body{
+    padding: 8px !important;
+    border-top: 1px solid rgba(0,0,0,.10);
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title title"
+      "price cart";
+    row-gap: 6px;
+    column-gap: 8px;
+
+    text-align: center;
+    align-items: center !important;
+  }
+
+  /* title */
+  .lr-shop-products .lr-card__title,
+  body.single-product .related .lr-card__title{
+    grid-area: title;
+    text-align: center;
+
+    /* типографика: максимально нейтрально, НЕ жирним */
+    font-weight: 400 !important;
+    letter-spacing: normal !important;
+
+    padding: 0 0 8px 0;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(0,0,0,.10);
+
+    -webkit-line-clamp: 2;
+  }
+
+  /* price cell + separator */
+  .lr-shop-products .lr-card__price,
+  body.single-product .related .lr-card__price{
+    grid-area: price;
+    padding: 0 8px 0 0 !important;
+    margin: 0 !important;
+    border-right: 1px solid rgba(0,0,0,.10);
+  }
+
+  .lr-shop-products .lr-card__price .price,
+  body.single-product .related .lr-card__price .price{
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+  }
+
+  /* discount */
+  .lr-shop-products .lr-card__price .price ins,
+  body.single-product .related .lr-card__price .price ins{
+    order: 1;
+    font-weight: 600 !important; /* не 700/800 */
+    text-decoration: none;
+    background: transparent;
+  }
+
+  .lr-shop-products .lr-card__price .price del,
+  body.single-product .related .lr-card__price .price del{
+    order: 2;
+    margin: 4px 0 0 !important;
+    opacity: .28;
+    font-weight: 400 !important;
+    font-size: 12px;
+  }
+
+  /* no discount */
+  .lr-shop-products .lr-card__price .price > .woocommerce-Price-amount,
+  body.single-product .related .lr-card__price .price > .woocommerce-Price-amount{
+    font-weight: 600 !important; /* не жирно */
+  }
+
+  /* actions cell — always visible cart icon */
+  .lr-shop-products .lr-card__actions,
+  body.single-product .related .lr-card__actions{
+    grid-area: cart;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  .lr-shop-products .lr-card__actions .button,
+  .lr-shop-products .lr-card__actions a.button,
+  .lr-shop-products .lr-card__actions button.button,
+  body.single-product .related .lr-card__actions .button,
+  body.single-product .related .lr-card__actions a.button,
+  body.single-product .related .lr-card__actions button.button{
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+
+    padding: 0 !important;
+    border-radius: 10px !important;
+
+    background: #fff !important;
+    border: 1px solid rgba(0,0,0,.18) !important;
+    color: #525252 !important;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
+    box-shadow: none !important;
+
+    /* ВСЕГДА видимая */
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  /* icon */
+  .lr-shop-products .lr-card__actions .button::before,
+  .lr-shop-products .lr-card__actions a.button::before,
+  .lr-shop-products .lr-card__actions button.button::before,
+  body.single-product .related .lr-card__actions .button::before,
+  body.single-product .related .lr-card__actions a.button::before,
+  body.single-product .related .lr-card__actions button.button::before{
+    display: block !important;
+    content: "" !important;
+    width: 16px;
+    height: 16px;
+    margin: 0 auto;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2ZM7.2 14h9.9c.75 0 1.4-.41 1.74-1.03L21 6H7.42L6.7 4H3v2h2l3.6 7.59-1.35 2.44C6.52 17.37 7.48 19 9 19h12v-2H9l1.1-2Z'/></svg>") center / contain no-repeat;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2ZM7.2 14h9.9c.75 0 1.4-.41 1.74-1.03L21 6H7.42L6.7 4H3v2h2l3.6 7.59-1.35 2.44C6.52 17.37 7.48 19 9 19h12v-2H9l1.1-2Z'/></svg>") center / contain no-repeat;
+  }
+
+  .lr-shop-products .lr-card__actions .button:hover,
+  .lr-shop-products .lr-card__actions a.button:hover,
+  .lr-shop-products .lr-card__actions button.button:hover,
+  body.single-product .related .lr-card__actions .button:hover,
+  body.single-product .related .lr-card__actions a.button:hover,
+  body.single-product .related .lr-card__actions button.button:hover{
+    background: #f6f6f6 !important;
+    border-color: rgba(0,0,0,.22) !important;
+  }
+
+  /* ultra narrow */
+  @media (max-width: 360px){
+    .lr-shop-products ul.products,
+    body.single-product .related ul.products{ gap: 8px !important; }
+
+    .lr-shop-products .lr-card__body,
+    body.single-product .related .lr-card__body{
+      padding: 6px !important;
+      column-gap: 6px;
+      row-gap: 6px;
+    }
+
+    .lr-shop-products .lr-card__actions .button,
+    .lr-shop-products .lr-card__actions a.button,
+    .lr-shop-products .lr-card__actions button.button,
+    body.single-product .related .lr-card__actions .button,
+    body.single-product .related .lr-card__actions a.button,
+    body.single-product .related .lr-card__actions button.button{
+      width: 34px !important;
+      height: 34px !important;
+      min-width: 34px !important;
+      border-radius: 9px !important;
+    }
+  }
+}
+
+
+/* ===========================
+   LR CARD — TYPOGRAPHY (clean)
+   =========================== */
+
+:root{
+  --lr-card-title-weight: 600;
+  --lr-card-price-weight: 500;
+  --lr-card-del-weight: 400;
+  --lr-card-btn-weight: 400;
+}
+
+/* Title */
+.lr-card .woocommerce-loop-product__title,
+.lr-card h2.woocommerce-loop-product__title,
+.lr-card .lr-card__title{
+  font-weight: var(--lr-card-title-weight) !important;
+  letter-spacing: normal !important;
+}
+
+/* Price */
+.lr-card .price,
+.lr-card .price .woocommerce-Price-amount,
+.lr-card .price bdi,
+.lr-card .price ins{
+  font-weight: var(--lr-card-price-weight) !important;
+  letter-spacing: normal !important;
+}
+
+/* Old price */
+.lr-card .price del,
+.lr-card .price del bdi{
+  font-weight: var(--lr-card-del-weight) !important;
+}
+
+/* Button label */
+.lr-card .lr-card__actions .button,
+.lr-card .lr-card__actions a.button,
+.lr-card .lr-card__actions button.button,
+.lr-card .lr-card__actions .button span,
+.lr-card .lr-card__actions a.button span{
+  font-weight: var(--lr-card-btn-weight) !important;
+  text-transform: none !important;
+}
+
+/* Mobile V2 (<=470): keep cart icon button not-bold */
+@media (max-width: 470px){
+  .lr-shop-products .lr-card .lr-card__actions .button,
+  .lr-shop-products .lr-card .lr-card__actions a.button,
+  body.single-product .related .lr-card .lr-card__actions .button,
+  body.single-product .related .lr-card .lr-card__actions a.button{
+    font-weight: var(--lr-card-btn-weight) !important;
+  }
 }

@@ -1,0 +1,631 @@
+/* =====================================================
+   combo-modal.css — FULL (final)
+   - common scroll only (no inner scrollbars)
+   - icons are gray (your SVGs)
+   - "free postcard" icon is ALSO in the same square
+   - mobile: when 2-col layout doesn't fit -> 1-col,
+     hide image + USP completely, show title "до 7,5%"
+   ===================================================== */
+
+:root{
+  --lr-combo-gray: #525252;
+  --lr-combo-muted: #7a7a7a;
+  --lr-combo-line: rgba(0,0,0,.10);
+  --lr-combo-shadow: 0 20px 70px rgba(0,0,0,.25);
+  --lr-combo-radius: 18px;
+  --lr-combo-icon-box: 64px;
+  --lr-combo-icon-size: 22px;
+  --lr-combo-icon-r: 10px;
+}
+
+/* DO NOT lock body — scroll should be only common (overlay) */
+body.lr-combo-open{ overflow: auto; }
+
+.lr-combo[hidden]{ display:none !important; }
+
+.lr-combo{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  overflow: auto;                 /* common scroll here */
+  -webkit-overflow-scrolling: touch;
+}
+
+.lr-combo__overlay{
+  position: fixed;                /* overlay doesn't move */
+  inset: 0;
+  background: rgba(0,0,0,.35);
+}
+
+.lr-combo__dialog{
+  position: relative;
+  width: min(1180px, calc(100% - 40px));
+  height: auto;                   /* NO fixed height */
+  margin: 20px auto;
+
+  background: #fff;
+  border-radius: var(--lr-combo-radius);
+  overflow: hidden;               /* no inner scrollbars */
+  box-shadow: var(--lr-combo-shadow);
+}
+
+.lr-combo__close{
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--lr-combo-muted);
+  z-index: 5;
+}
+
+/* Layout */
+.lr-combo__grid{
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+}
+
+.lr-combo__left{
+  padding: 26px;
+  border-right: 1px solid var(--lr-combo-line);
+  overflow: visible;              /* no inner scroll */
+}
+
+.lr-combo__right{
+  padding: 26px;
+  overflow: visible;              /* no inner scroll */
+}
+
+/* Image */
+.lr-combo__imgwrap{
+  border-radius: var(--lr-combo-radius);
+  overflow: hidden;
+  background: #f4f4f4;
+}
+
+.lr-combo__img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Title (desktop/mobile switch) */
+.lr-combo__title{
+  font-family: var(--lr-font-text);
+  color: var(--lr-combo-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 6px 0 18px;
+}
+
+.lr-combo__title--mob{ display:none; }
+.lr-combo__title--desk{ display:inline; }
+
+/* List */
+.lr-combo__list{
+  display: grid;
+  gap: 16px;
+}
+
+.lr-combo__item{
+  display: grid;
+  grid-template-columns: var(--lr-combo-icon-box) 1fr;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--lr-combo-line);
+}
+
+.lr-combo__text{ min-width: 0; }
+
+.lr-combo__h{
+  font-family: var(--lr-font-text);
+  color: var(--lr-combo-gray);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.lr-combo__p{
+  margin-top: 6px;
+  font-family: var(--lr-font-text);
+  color: var(--lr-combo-muted);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.lr-combo__btn{
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--lr-combo-gray);
+  color: #fff;
+  font-family: var(--lr-font-text);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* Summary */
+.lr-combo__summary{
+  margin-top: 6px;
+  padding-top: 14px;
+  border-top: 1px solid var(--lr-combo-line);
+}
+
+.lr-combo__row{
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  color: var(--lr-combo-muted);
+  font-family: var(--lr-font-text);
+  font-size: 14px;
+}
+
+.lr-combo__row--total{
+  padding-top: 14px;
+  margin-top: 10px;
+  border-top: 1px solid var(--lr-combo-line);
+  color: var(--lr-combo-gray);
+  font-size: 18px;
+  letter-spacing: .02em;
+}
+
+.lr-combo__checkout{
+  margin-top: 16px;
+  width: 100% !important;
+  max-width: 520px;
+}
+
+/* =====================================================
+   USP under image (2x2 always)
+   ===================================================== */
+.lr-combo-usps{ margin-top: 18px; }
+
+.lr-combo-usps__grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 18px;
+}
+
+.lr-combo-usp{
+  text-align: center;
+  padding: 10px 8px;
+}
+
+.lr-combo-usp__t{
+  color: var(--lr-combo-gray);
+  font-family: var(--lr-font-text);
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.lr-combo-usp__d{
+  margin-top: 6px;
+  color: var(--lr-combo-muted);
+  font-family: var(--lr-font-text);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* =====================================================
+   ICONS (your SVGs) — gray via mask
+   - for ITEM icons and FREE icon: square + inner icon
+   - for USP icons: plain icon (no square)
+   ===================================================== */
+
+.lr-ico{
+  display: inline-block;
+}
+
+/* Item icon square */
+.lr-combo__icon.lr-ico{
+  width: var(--lr-combo-icon-box);
+  height: var(--lr-combo-icon-box);
+  border: 1px solid rgba(0,0,0,.18);
+  border-radius: var(--lr-combo-icon-r);
+  background: transparent;
+  position: relative;
+
+  -webkit-mask-image: none;
+          mask-image: none;
+}
+
+/* Inner icon rendered via ::after as mask */
+.lr-combo__icon.lr-ico::after{
+  content:"";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--lr-combo-icon-size);
+  height: var(--lr-combo-icon-size);
+  background-color: var(--lr-combo-gray);
+
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+
+          mask-repeat: no-repeat;
+          mask-position: center;
+          mask-size: contain;
+}
+
+/* Item icons mask sources */
+.lr-combo__icon.lr-ico--cveti::after{
+  -webkit-mask-image: url("/wp-content/uploads/2026/02/cveti.svg");
+          mask-image: url("/wp-content/uploads/2026/02/cveti.svg");
+}
+.lr-combo__icon.lr-ico--klubnica::after{
+  -webkit-mask-image: url("/wp-content/uploads/2026/02/klubnica.svg");
+          mask-image: url("/wp-content/uploads/2026/02/klubnica.svg");
+}
+.lr-combo__icon.lr-ico--podarok::after{
+  -webkit-mask-image: url("/wp-content/uploads/2026/02/podarok.svg");
+          mask-image: url("/wp-content/uploads/2026/02/podarok.svg");
+}
+.lr-combo__icon.lr-ico--otkritka::after{
+  -webkit-mask-image: url("/wp-content/uploads/2026/02/otkritka.svg");
+          mask-image: url("/wp-content/uploads/2026/02/otkritka.svg");
+}
+
+/* USP icons (no square) */
+.lr-combo-usp__ico.lr-ico{
+  width: 20px;
+  height: 20px;
+  margin: 0 auto 8px;
+  background-color: var(--lr-combo-gray);
+
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+
+          mask-repeat: no-repeat;
+          mask-position: center;
+          mask-size: contain;
+}
+
+.lr-combo-usp__ico.lr-ico--zvezda{
+  -webkit-mask-image: url("/wp-content/uploads/2026/02/zvezda.svg");
+          mask-image: url("/wp-content/uploads/2026/02/zvezda.svg");
+}
+.lr-combo-usp__ico.lr-ico--kamera{
+  -webkit-mask-image: url("/wp-content/uploads/2026/02/kamera.svg");
+          mask-image: url("/wp-content/uploads/2026/02/kamera.svg");
+}
+.lr-combo-usp__ico.lr-ico--podarok{
+  -webkit-mask-image: url("/wp-content/uploads/2026/02/podarok.svg");
+          mask-image: url("/wp-content/uploads/2026/02/podarok.svg");
+}
+.lr-combo-usp__ico.lr-ico--procent{
+  -webkit-mask-image: url("/wp-content/uploads/2026/02/procent.svg");
+          mask-image: url("/wp-content/uploads/2026/02/procent.svg");
+}
+
+/* =====================================================
+   FREE (postcard) — same layout as items (square icon)
+   ===================================================== */
+.lr-combo__free{
+  display: grid;
+  grid-template-columns: var(--lr-combo-icon-box) 1fr;
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px solid var(--lr-combo-line);
+}
+
+.lr-combo__free-text{
+  color: var(--lr-combo-muted);
+  font-family: var(--lr-font-text);
+  font-size: 14px;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+}
+
+/* =====================================================
+   MOBILE MODE:
+   - when 2-col layout doesn't fit -> 1-col
+   - hide image + USP completely
+   - show title "до 7,5%"
+   ===================================================== */
+@media (max-width: 980px){
+
+  .lr-combo__grid{
+    grid-template-columns: 1fr !important;
+  }
+
+  /* remove left block fully */
+  .lr-combo__left{
+    display: none !important;
+  }
+
+  .lr-combo__right{
+    padding: 20px !important;
+  }
+
+  .lr-combo__title{
+    font-size: 20px;
+    margin: 0 0 14px;
+  }
+
+  .lr-combo__title--desk{ display:none !important; }
+  .lr-combo__title--mob{ display:inline !important; }
+
+  .lr-combo__item{
+    padding: 12px 0 !important;
+  }
+
+  .lr-combo__checkout{
+    max-width: none !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 420px){
+  .lr-combo__dialog{
+    width: calc(100% - 24px);
+    margin: 12px auto;
+    border-radius: 14px;
+  }
+  .lr-combo__right{
+    padding: 16px !important;
+  }
+
+  :root{
+    --lr-combo-icon-box: 56px;
+    --lr-combo-icon-size: 20px;
+    --lr-combo-icon-r: 10px;
+  }
+
+  .lr-combo__h{ font-size: 15px; }
+  .lr-combo__p{ font-size: 13px; }
+}
+
+
+/* =====================================================
+   PICKER (left products grid) — VISUAL ONLY
+   2 items per row, several rows (overall modal scroll only)
+   ===================================================== */
+
+.lr-combo-pick[hidden]{ display:none !important; }
+
+.lr-combo-pick__top{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 0 14px;
+  border-bottom: 1px solid var(--lr-combo-line);
+  margin-bottom: 16px;
+}
+
+.lr-combo-pick__back{
+  border: 0;
+  background: transparent;
+  color: var(--lr-combo-gray);
+  font-family: var(--lr-font-text);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: .02em;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.lr-combo-pick__ttl{
+  color: var(--lr-combo-muted);
+  font-family: var(--lr-font-text);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 400;
+  font-size: 14px;
+  text-align: right;
+}
+
+.lr-combo-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.lr-combo-card{
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  display:flex;
+  flex-direction: column;
+  min-width:0;
+}
+
+.lr-combo-card__img{
+  display:block;
+  background:#f4f4f4;
+}
+.lr-combo-card__img img{
+  width: 100%;
+  height: auto;
+  display:block;
+}
+
+.lr-combo-card__body{
+  padding: 10px 10px 12px;
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lr-combo-card__name{
+  font-family: var(--lr-font-text);
+  color: var(--lr-combo-gray);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.25;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.lr-combo-card__price{
+  font-family: var(--lr-font-text);
+  color: var(--lr-combo-muted);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.2;
+}
+.lr-combo-card__price ins{ text-decoration: none; font-weight: 600; color: var(--lr-combo-gray); }
+.lr-combo-card__price del{ opacity: .5; }
+
+.lr-combo-card__btn{
+  margin-top: 4px;
+  height: 32px;
+  border-radius: 12px;
+  border: 1px solid var(--lr-combo-gray);
+  background:#fff;
+  color: var(--lr-combo-gray);
+  font-family: var(--lr-font-text);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color .25s, color .25s, border-color .25s;
+}
+
+.lr-combo-card__btn:hover{
+  background: var(--lr-combo-gray);
+  color: #fff;
+}
+
+.lr-combo-card__btn.is-selected{
+  background: var(--lr-combo-gray);
+  color: #fff;
+}
+
+.lr-combo-pick__foot{
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--lr-combo-line);
+}
+
+.lr-combo-pick__hint{
+  color: var(--lr-combo-muted);
+  font-family: var(--lr-font-text);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.lr-combo-empty{
+  grid-column: 1 / -1;
+  color: var(--lr-combo-muted);
+  font-family: var(--lr-font-text);
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 8px 0;
+}
+
+/* mobile already hides left column completely (your rule).
+   picker is desktop/tablet only by design. */
+
+
+
+/* =====================================================
+   PICKED ROW (replaces "Добавить ...")
+   ===================================================== */
+
+.lr-combo-picked{
+  display: grid;
+  grid-template-columns: 74px 1fr 40px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--lr-combo-line);
+}
+
+.lr-combo-picked__img{
+  width: 74px;
+  height: 74px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f4f4f4;
+}
+
+.lr-combo-picked__img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lr-combo-picked__info{
+  min-width: 0;
+}
+
+.lr-combo-picked__name{
+  font-family: var(--lr-font-text);
+  color: var(--lr-combo-gray);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.25;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.lr-combo-picked__price{
+  margin-top: 6px;
+  font-family: var(--lr-font-text);
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--lr-combo-muted);
+}
+
+.lr-combo-picked__price ins{ text-decoration: none; font-weight: 600; color: var(--lr-combo-gray); }
+.lr-combo-picked__price del{ opacity: .5; }
+
+.lr-combo-picked__link{
+  margin-top: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--lr-combo-muted);
+  font-family: var(--lr-font-text);
+  font-size: 12px;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lr-combo-picked__rm{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.18);
+  background: #fff;
+  cursor: pointer;
+  color: var(--lr-combo-muted);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.lr-combo-picked__rm:hover{
+  color: var(--lr-combo-gray);
+  border-color: rgba(0,0,0,.28);
+}

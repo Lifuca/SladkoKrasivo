@@ -28,6 +28,12 @@ while (have_posts()) : the_post();
   if (empty($image_ids)) {
     $placeholder = wc_placeholder_img_src('woocommerce_single');
   }
+
+  // URLs для 4 картинок блока "как у референса"
+  $packaging_img = home_url('/wp-content/uploads/2026/02/upakovka.png');
+  $card_img      = home_url('/wp-content/uploads/2026/02/otkritka.png');
+  $carry_img     = home_url('/wp-content/uploads/2026/02/perenoska.png');
+  $manual_img    = home_url('/wp-content/uploads/2026/02/insrukciya.png');
 ?>
 
 <main class="lr-main lr-main--product">
@@ -122,9 +128,13 @@ while (have_posts()) : the_post();
             <?php woocommerce_template_single_add_to_cart(); ?>
           </div>
 
-          <button class="lr-btn lr-btn--ghost" type="button" data-lr-combo>
+          <button class="lr-btn lr-btn--ghost" type="button" data-lr-combo aria-controls="lrComboModal" aria-haspopup="dialog">
             Собрать комбо -10%
           </button>
+        </div>
+
+        <div class="lr-sp__note">
+          Состав букета может быть незначительно изменен. При этом стилистика и цветовая гамма останутся неизменными.
         </div>
 
         <div class="lr-sp__short">
@@ -137,41 +147,115 @@ while (have_posts()) : the_post();
       </div>
     </section>
 
-    <!-- USP blocks -->
-    <section class="lr-sp-usps" aria-label="Преимущества">
-      <div class="lr-sp-usps__grid">
-        <article class="lr-sp-usp">
-          <div class="lr-sp-usp__ico" aria-hidden="true">✓</div>
-          <div class="lr-sp-usp__t">Гарантия качества</div>
-          <div class="lr-sp-usp__d">72 часа гарантии свежести на каждый букет. Если что-то не так — заменим.</div>
-        </article>
+    <!-- BLOCK: 4 cards like reference -->
+    <section class="lr-sp-ref" aria-label="Комплектация">
+      <div class="lr-sp-ref__grid">
+        <figure class="lr-sp-ref__item">
+          <div class="lr-sp-ref__imgwrap">
+            <img class="lr-sp-ref__img" src="<?php echo esc_url($packaging_img); ?>" alt="Фирменная дизайнерская упаковка" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="lr-sp-ref__cap">Фирменная дизайнерская упаковка</figcaption>
+        </figure>
 
-        <article class="lr-sp-usp">
-          <div class="lr-sp-usp__ico" aria-hidden="true">📷</div>
-          <div class="lr-sp-usp__t">Фотоконтроль</div>
-          <div class="lr-sp-usp__d">Отправим фото вашего заказа перед доставкой в удобный мессенджер.</div>
-        </article>
+        <figure class="lr-sp-ref__item">
+          <div class="lr-sp-ref__imgwrap">
+            <img class="lr-sp-ref__img" src="<?php echo esc_url($card_img); ?>" alt="Записка с теплыми словами" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="lr-sp-ref__cap">Записка с теплыми словами</figcaption>
+        </figure>
 
-        <article class="lr-sp-usp">
-          <div class="lr-sp-usp__ico" aria-hidden="true">🎁</div>
-          <div class="lr-sp-usp__t">Подарок для вас</div>
-          <div class="lr-sp-usp__d">Дарим бонусы на следующие покупки — приятно возвращаться.</div>
-        </article>
+        <figure class="lr-sp-ref__item">
+          <div class="lr-sp-ref__imgwrap">
+            <img class="lr-sp-ref__img" src="<?php echo esc_url($carry_img); ?>" alt="Переноска и аквабокс для цветов" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="lr-sp-ref__cap">Переноска и аквабокс для цветов</figcaption>
+        </figure>
 
-        <article class="lr-sp-usp">
-          <div class="lr-sp-usp__ico" aria-hidden="true">%</div>
-          <div class="lr-sp-usp__t">Кешбэк</div>
-          <div class="lr-sp-usp__d">Начисляем бонусы после покупки — используйте их в личном кабинете.</div>
-        </article>
+        <figure class="lr-sp-ref__item">
+          <div class="lr-sp-ref__imgwrap">
+            <img class="lr-sp-ref__img" src="<?php echo esc_url($manual_img); ?>" alt="Инструкция о хранении" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="lr-sp-ref__cap">Инструкция о хранении</figcaption>
+        </figure>
       </div>
     </section>
 
+    <!-- Yandex reviews block -->
+    <?php get_template_part('template-parts/yandex-reviews'); ?>
+
+    <!-- Related products (moved here) -->
     <?php woocommerce_output_related_products(); ?>
 
+    <!-- Info blocks like screenshot -->
+    <section class="lr-sp-info" aria-label="Информация">
+      <div class="lr-sp-info__top">
+        <div class="lr-sp-info__topgrid">
+          <div class="lr-sp-info__topitem">
+            <div class="lr-sp-info__ico" aria-hidden="true">★</div>
+            <div class="lr-sp-info__t">Гарантия качества</div>
+            <div class="lr-sp-info__d">Поменяем букет или вернём деньги если что-то пошло не так</div>
+          </div>
+
+          <div class="lr-sp-info__topitem">
+            <div class="lr-sp-info__ico" aria-hidden="true">📷</div>
+            <div class="lr-sp-info__t">Фотоконтроль</div>
+            <div class="lr-sp-info__d">Отправляем фото заказа перед доставкой в любой мессенджер</div>
+          </div>
+
+          <div class="lr-sp-info__topitem">
+            <div class="lr-sp-info__ico" aria-hidden="true">🎁</div>
+            <div class="lr-sp-info__t">Доставка</div>
+            <div class="lr-sp-info__d">Доставим в указанное время и оповестим о выполнении заказа по SMS</div>
+          </div>
+
+          <div class="lr-sp-info__topitem">
+            <div class="lr-sp-info__ico" aria-hidden="true">%</div>
+            <div class="lr-sp-info__t">Кешбэк до 15%</div>
+            <div class="lr-sp-info__d">Возвращаем до 15% бонусами в личный кабинет от каждого заказа</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lr-sp-info__bottom">
+        <div class="lr-sp-info__grid">
+          <article class="lr-sp-info__cell">
+            <h3 class="lr-sp-info__h">Условия доставки</h3>
+            <p class="lr-sp-info__p">Доставка по Саратову — от 300 руб. Стоимость доставки в отдаленные районы рассчитывается индивидуально менеджером.</p>
+          </article>
+
+          <article class="lr-sp-info__cell">
+            <h3 class="lr-sp-info__h">Срок хранения</h3>
+            <p class="lr-sp-info__p">Срок годности клубники в шоколаде — 12 часов, клубники без шоколада — 24 часа. Ягоду необходимо хранить в холодильнике при температуре +4…+7 градусов. Не держите клубнику на солнце или в тепле.</p>
+          </article>
+
+          <article class="lr-sp-info__cell">
+            <h3 class="lr-sp-info__h">Интервал доставки</h3>
+            <p class="lr-sp-info__p">Доставка цветов по Саратову осуществляется в часовом интервале. Самая ранняя доставка с 09:00 до 10:00, самая поздняя с 20:00 до 21:00.</p>
+          </article>
+
+          <article class="lr-sp-info__cell">
+            <h3 class="lr-sp-info__h">Способ оплаты</h3>
+            <p class="lr-sp-info__p">Мы работаем по 100% предоплате. Оплата производится онлайн после подтверждения заказа менеджером. После оформления заказа с Вами свяжется менеджер и проконсультирует.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dual promo -->
+    <?php get_template_part('template-parts/dual-promo'); ?>
+
   </div>
+<?php get_template_part('template-parts/combo-modal'); ?>
 </main>
 
 <?php
 endwhile;
 
 get_footer();
+
+
+
+
+
+
+
