@@ -110,7 +110,7 @@
 .lr-filter__title{
   font-family: var(--lr-font-text);
   font-size: 14px;
-  font-weight: 600;              /* было жирно — делаем спокойнее */
+  font-weight: 600;
   letter-spacing: .01em;
   color: var(--lr-text);
   opacity: .92;
@@ -181,8 +181,9 @@
   display: none !important;
 }
 
-/* Hide Woo "Filter" button + its wrapper spacing */
-.lr-filter--price .widget_price_filter .price_slider_amount .button{
+/* Hide Woo "Filter" button */
+.lr-filter--price .widget_price_filter .price_slider_amount .button,
+.lr-filter--price .widget_price_filter input[type="submit"]{
   display: none !important;
 }
 .lr-filter--price .widget_price_filter .price_slider_amount{
@@ -212,7 +213,7 @@
   border: 1px solid var(--lr-line);
   background: #f2f2f2;
   color: var(--lr-text);
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
   cursor: pointer;
@@ -228,7 +229,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
   text-decoration: none;
@@ -236,67 +237,105 @@
 }
 
 /* products list stability */
-.lr-shop-products ul.products{ margin: 0; }
-
-/* responsive */
-@media (max-width: 920px){
-  .lr-shop-grid{ grid-template-columns: 1fr; }
-  .lr-shop-header{ text-align: left; }
-  .lr-shop-title{ text-align: left; }
+.lr-shop-products ul.products{
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-
 /* =====================================================
-   RESPONSIVE RULES (your logic)
-   - Keep filters while 3+ products per row are realistic
-   - Hide filters when we drop to 2-per-row and below
+   IMPORTANT FIX: Woo clearfix pseudo-elements become GRID items
+   -> they create "empty slot". We kill them when grid is used.
+   (We also keep :empty li protection, but main issue is ::before/::after)
    ===================================================== */
 
-/* 1) Desktop / wide: filters + products */
+.lr-shop-products ul.products li.product:empty{
+  display: none !important;
+}
+
+/* =====================================================
+   RESPONSIVE RULES (fixed + your logic)
+   ===================================================== */
+
+/* Desktop / wide: filters + products (3 columns default) */
 @media (min-width: 921px){
   .lr-shop-grid{
     grid-template-columns: 290px minmax(0, 1fr);
   }
 
-  /* products: allow 3-4 depending on width */
   .lr-shop-products ul.products{
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px;
   }
+
+  /* 🔥 MAIN "EMPTY SLOT" KILLER */
+  .lr-shop-products ul.products::before,
+  .lr-shop-products ul.products::after{
+    content: none !important;
+    display: none !important;
+  }
+
+  /* reset old theme float/width */
+  .lr-shop-products ul.products li.product{
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important;
+  }
 }
 
-/* Optional: very wide screens can fit 4 */
+/* Very wide: 4 columns */
 @media (min-width: 1240px){
   .lr-shop-products ul.products{
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-/* 2) When screen gets narrow enough that products would become <3,
-      we hide filters completely and give products full width */
+/* Narrow: hide filters, products 2 columns */
 @media (max-width: 920px){
   .lr-shop-grid{
     grid-template-columns: 1fr;
   }
 
-  /* Hide filters полностью */
   .lr-shop-sidebar{
     display: none !important;
   }
 
-  /* Products become 2 columns */
+  .lr-shop-header{ text-align: left; }
+  .lr-shop-title{ text-align: left; }
+
+  .lr-sort{
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .lr-sort__control{ width: 100%; }
+  .lr-sort__control select{ width: 100%; }
+
   .lr-shop-products ul.products{
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
+
+  /* 🔥 SAME FIX on mobile grid */
+  .lr-shop-products ul.products::before,
+  .lr-shop-products ul.products::after{
+    content: none !important;
+    display: none !important;
+  }
+
+  .lr-shop-products ul.products li.product{
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important;
+  }
 }
 
-/* 3) Very narrow: 1 per row */
+/* Very narrow: 1 column */
 @media (max-width: 520px){
   .lr-shop-products ul.products{
     grid-template-columns: 1fr;
     gap: 12px;
   }
 }
+

@@ -1,0 +1,367 @@
+/* =====================================================
+   SINGLE PRODUCT — donor-like layout + responsive steps
+   Container width unchanged (header/footer width)
+   ===================================================== */
+
+.lr-main--product{ padding: 18px 0 50px; }
+
+/* breadcrumbs — серые */
+.lr-sp-breadcrumbs .woocommerce-breadcrumb{
+  margin: 6px 0 18px;
+  font-size: 13px;
+  color: var(--lr-muted);
+  opacity: .8;
+}
+
+/* hide any theme single-product title duplication */
+.woocommerce div.product .product_title{ display:none; }
+
+/* =========================
+   MAIN GRID (desktop)
+   ========================= */
+.lr-sp{
+  display: grid;
+  grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+  gap: 78px; /* твой "чёткий" отступ */
+  align-items: start;
+}
+.lr-sp__left,
+.lr-sp__right{ min-width:0; }
+
+/* ===== Gallery ===== */
+.lr-sp-gal__stage{
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #f3f3f3;
+}
+
+.lr-sp-gal__track{
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+}
+.lr-sp-gal__track:active{ cursor: grabbing; }
+.lr-sp-gal__track::-webkit-scrollbar{ display:none; }
+
+.lr-sp-gal__slide{ flex: 0 0 100%; scroll-snap-align: start; }
+
+.lr-sp-gal__img{
+  width: 100%;
+  height: clamp(302px, 35vw, 437px);
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* arrows */
+.lr-sp-gal__nav{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.14);
+  background: rgba(255,255,255,.78);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  z-index: 5;
+  cursor: pointer;
+}
+.lr-sp-gal__nav span{
+  font-size: 26px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+.lr-sp-gal__nav--prev{ left: 14px; }
+.lr-sp-gal__nav--next{ right: 14px; }
+
+/* thumbs — всегда по ширине основной картинки */
+.lr-sp-gal__thumbs{
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  max-width: 520px; /* соответствует ширине левой колонки на десктопе */
+}
+.lr-sp-gal__thumb{
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  border: 2px solid rgba(0,0,0,.10);
+  overflow: hidden;
+  padding: 0;
+  background: #fff;
+  cursor: pointer;
+  opacity: .85;
+}
+.lr-sp-gal__thumb.is-active{
+  border-color: rgba(0,0,0,.35);
+  opacity: 1;
+}
+.lr-sp-gal__thumb-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* =========================
+   SUMMARY
+   ========================= */
+.lr-sp__right{ padding-top: 6px; }
+
+.lr-sp__title{
+  margin: 0 0 10px;
+  font-family: var(--lr-font-head);
+  font-weight: 800;
+  font-size: clamp(26px, 2.6vw, 38px);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--lr-heading-color);
+}
+
+.lr-sp__meta{
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin: 0 0 16px;
+  flex-wrap: wrap;
+}
+
+.lr-sp__price{
+  font-family: var(--lr-font-head);
+  font-size: clamp(28px, 2.8vw, 44px);
+  font-weight: 700;
+  color: var(--lr-text);
+  letter-spacing: .02em;
+}
+.lr-sp__price del{ opacity: .35; margin-right: 10px; }
+.lr-sp__price ins{ text-decoration: none; }
+
+.lr-sp__bonus{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--lr-muted);
+  white-space: nowrap;
+}
+.lr-sp__bonus-val{ font-weight: 700; color: rgba(0,0,0,.75); }
+.lr-sp__bonus-q{
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(0,0,0,.18);
+  font-size: 12px;
+  opacity: .8;
+}
+
+/* ===== Actions ===== */
+.lr-sp__actions{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 10px 0 10px;
+  flex-wrap: nowrap; /* на десктопе всегда в строку */
+}
+
+.lr-sp__add,
+.lr-btn--ghost{ flex: 1 1 0; min-width: 0; }
+
+/* Hide quantity field */
+.lr-sp__add .quantity,
+.lr-sp__add input.qty{ display: none !important; }
+
+/* =========================
+   Button "volume" like donor:
+   - псевдо-рамка смещена вправо-вниз
+   - на hover объём пропадает
+   - шрифт тоньше
+   - серый темнее
+   ========================= */
+
+:root{
+  --lr-btn-dark: #5f5f5f;      /* темнее, чем --lr-primary */
+  --lr-btn-border: #6a6a6a;    /* тонкая обводка */
+  --lr-btn-volume: rgba(0,0,0,.35);
+  --lr-btn-volume-offset: 3px;
+  --lr-btn-radius: 999px;
+}
+
+.lr-sp__add .single_add_to_cart_button,
+.lr-btn{
+  position: relative;
+  border-radius: var(--lr-btn-radius);
+  padding: 14px 18px;
+  cursor: pointer;
+  font-family: var(--lr-font-head);
+  font-weight: 400;                 /* тоньше */
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  white-space: nowrap;
+  transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+/* "объёмная рамка" */
+.lr-sp__add .single_add_to_cart_button::after,
+.lr-btn::after{
+  content:"";
+  position:absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid var(--lr-btn-border);
+  transform: translate(var(--lr-btn-volume-offset), var(--lr-btn-volume-offset));
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  opacity: 1;
+}
+
+/* СЕРАЯ (Add to cart) */
+.lr-sp__add .single_add_to_cart_button{
+  width: 100% !important;
+  border: 1px solid var(--lr-btn-dark) !important;
+  background: var(--lr-btn-dark) !important; /* темнее */
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* БЕЛАЯ (ghost) */
+.lr-btn--ghost{
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--lr-btn-border);
+  color: var(--lr-btn-dark);
+}
+
+/* hover swap (инверсия) + убрать объём */
+.lr-sp__add .single_add_to_cart_button:hover,
+.lr-sp__add .single_add_to_cart_button:focus-visible{
+  background: #fff !important;
+  color: var(--lr-btn-dark) !important;
+  border-color: var(--lr-btn-border) !important;
+}
+.lr-btn--ghost:hover,
+.lr-btn--ghost:focus-visible{
+  background: var(--lr-btn-dark);
+  color: #fff;
+  border-color: var(--lr-btn-dark);
+}
+
+/* объём исчезает на hover/focus */
+.lr-sp__add .single_add_to_cart_button:hover::after,
+.lr-sp__add .single_add_to_cart_button:focus-visible::after,
+.lr-btn:hover::after,
+.lr-btn:focus-visible::after{
+  opacity: 0;
+  transform: translate(0,0);
+}
+
+/* note under buttons */
+.lr-sp__note{
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--lr-muted);
+  opacity: .85;
+  margin: 0 0 14px;
+}
+
+/* excerpt */
+.lr-sp__short{
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--lr-line);
+  color: var(--lr-muted);
+  font-size: 13px;
+  line-height: 1.55;
+  font-family: var(--lr-font-text);
+}
+
+/* content */
+.lr-sp__desc{
+  margin-top: 16px;
+  color: var(--lr-muted);
+  font-size: 13px;
+  line-height: 1.65;
+  font-family: var(--lr-font-text);
+}
+.lr-sp__desc > *:first-child{ margin-top: 0; }
+.lr-sp__desc h1, .lr-sp__desc h2, .lr-sp__desc h3{
+  font-family: var(--lr-font-head);
+  color: var(--lr-heading-color);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+/* =====================================================
+   RESPONSIVE STEPS (как ты описал)
+   1) <1250: кнопки друг под друга, правый блок уже
+   2) <1000: фото меньше, миниатюры меньше
+   3) <700: фото на всю ширину, правый блок под фото
+   ===================================================== */
+
+/* 1) до 1250: сохраняем 2 колонки, но делаем правый блок уже + кнопки колонкой */
+@media (max-width: 1250px){
+  .lr-sp{
+    grid-template-columns: minmax(0, 520px) minmax(0, 380px);
+    gap: 56px;
+  }
+  .lr-sp__actions{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .lr-sp__add, .lr-btn--ghost{ flex: 0 0 auto; }
+  .lr-sp-gal__thumbs{ max-width: 520px; }
+}
+
+/* 2) до 1000: уменьшаем фото (но всё ещё 2 колонки) */
+@media (max-width: 1000px){
+  .lr-sp{
+    grid-template-columns: minmax(0, 440px) minmax(0, 360px);
+    gap: 42px;
+  }
+  .lr-sp-gal__img{
+    height: clamp(270px, 34vw, 380px);
+  }
+  .lr-sp-gal__thumbs{ max-width: 440px; }
+  .lr-sp-gal__thumb{
+    width: 46px;
+    height: 46px;
+    border-radius: 9px;
+  }
+}
+
+/* 3) до 700: фото во всю ширину, правый блок вниз */
+@media (max-width: 700px){
+  .lr-sp{
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .lr-sp-gal__img{
+    height: clamp(300px, 78vw, 520px); /* можно крупнее на мобиле */
+  }
+  .lr-sp-gal__thumbs{ max-width: 100%; }
+  .lr-sp-gal__thumb{ width: 44px; height: 44px; }
+  .lr-sp__actions{ margin-top: 8px; }
+}
+
+/* чуть компактнее на очень маленьких */
+@media (max-width: 420px){
+  .lr-sp-gal__thumb{ width: 40px; height: 40px; }
+  .lr-sp__add .single_add_to_cart_button,
+  .lr-btn{ padding: 13px 14px; }
+}

@@ -1,17 +1,23 @@
 <?php
-if (!defined('ABSPATH')) exit;
-echo '<div style="position:fixed;top:50px;right:10px;z-index:999999;background:#22c55e;color:#fff;padding:8px 10px;border-radius:10px;font:12px Arial">LR single-product.php ACTIVE</div>';
+defined('ABSPATH') || exit;
 
-/**
- * Single Product
- */
-if (!defined('ABSPATH')) exit;
+get_header();
+?>
 
-do_action('woocommerce_before_main_content');
+<main class="lr-main lr-main--shop">
+  <div class="lr-container woocommerce">
 
-while (have_posts()) {
-  the_post();
-  wc_get_template_part('content', 'single-product');
-}
+    <?php if (function_exists('woocommerce_breadcrumb')): ?>
+      <?php woocommerce_breadcrumb(); ?>
+    <?php endif; ?>
 
-do_action('woocommerce_after_main_content');
+    <?php
+    while (have_posts()) : the_post();
+      wc_get_template_part('content', 'single-product');
+    endwhile;
+    ?>
+
+  </div>
+</main>
+
+<?php get_footer(); ?>

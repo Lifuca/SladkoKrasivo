@@ -88,24 +88,40 @@ add_action('wp_enqueue_scripts', function () {
   }
 
   /* =========================
-     CATALOG (shop/category/tag/product)
+     CATALOG (shop/category/tag)
      ========================= */
-  $is_shop_context = function_exists('is_woocommerce') && (
-    is_woocommerce() ||
+  $is_catalog_context = function_exists('is_woocommerce') && (
     is_shop() ||
     is_product_category() ||
     is_product_tag() ||
     is_product_taxonomy() ||
     is_tax('product_cat') ||
     is_tax('product_tag') ||
-    is_post_type_archive('product') ||
-    is_singular('product')
+    is_post_type_archive('product')
   );
 
-  if ($is_shop_context) {
+  if ($is_catalog_context) {
     if (file_exists($dir . '/assets/css/catalog.css')) {
       wp_enqueue_style('lr-catalog', $uri . '/assets/css/catalog.css', ['lr-main', 'lr-product-card'], $v);
+    }
+
+    if (file_exists($dir . '/assets/js/catalog-filters.js')) {
       wp_enqueue_script('lr-catalog-filters', $uri . '/assets/js/catalog-filters.js', [], $v, true);
+    }
+  }
+
+  /* =========================
+     SINGLE PRODUCT
+     ========================= */
+  if (function_exists('is_product') && is_product()) {
+
+    if (file_exists($dir . '/assets/css/single-product.css')) {
+      // ВАЖНО: грузим ПОСЛЕ lr-main и product-card, чтобы сингл мог перебить общие правила
+      wp_enqueue_style('lr-single-product', $uri . '/assets/css/single-product.css', ['lr-main', 'lr-product-card'], $v);
+    }
+
+    if (file_exists($dir . '/assets/js/single-product.js')) {
+      wp_enqueue_script('lr-single-product', $uri . '/assets/js/single-product.js', [], $v, true);
     }
   }
 
